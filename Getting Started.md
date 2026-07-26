@@ -6,33 +6,28 @@ Unlike a single-board computer such as the Raspberry Pi 4, the Raspberry Pi Pico
 
 This repository focuses on the **original Raspberry Pi Pico (2021)**, which features the **RP2040** microcontroller and **does not include built-in Wi-Fi or Bluetooth connectivity**. All networking capabilities, if required, must be added using external modules.
 
-![[IMG_20260726_131444.jpg]]
+![Original Raspberry Pi Pico](Assets/IMG_20260726_131444.jpg)
 
+---
 
 ## Key Features
 
 - Dual-core ARM Cortex-M0+ processor running at up to **133 MHz**
-    
 - **264 KB** of on-chip SRAM
-    
 - **2 MB** of onboard QSPI flash memory
-    
 - **26** multifunction GPIO pins
-    
 - Support for **I²C, SPI, UART, PWM, ADC, and PIO (Programmable I/O)**
-    
 - USB 1.1 device and host support
-    
 - Low-power operation suitable for battery-powered applications
-    
 - Programmable using **CircuitPython, MicroPython, C/C++, Arduino**, and other supported SDKs
-    
 
+---
 
 ## Repository Goal
 
 The objective of this repository is to document the process of learning embedded systems using the Raspberry Pi Pico through a series of practical experiments and projects. Each project is organized with source code, circuit diagrams, explanations, and demonstrations to provide a structured learning path from basic GPIO control to advanced peripheral interfacing.
 
+---
 
 # Getting Started
 
@@ -47,57 +42,59 @@ MicroPython is a lightweight implementation of Python designed specifically for 
 ## Requirements
 
 - Raspberry Pi Pico
-    
-- USB Type-A to Micro-USB cable (data cable)
-    
+- USB Type-A to Micro-USB cable (Data Cable)
 - A computer running Windows, Linux, or macOS
-    
 - Latest MicroPython UF2 firmware
-    
 
 ## Step 1: Download the Firmware
 
-Download the latest MicroPython UF2 firmware for the Raspberry Pi Pico from the official MicroPython website.
-![[download.png]]
+Download the latest MicroPython UF2 firmware from the official website.
 
-> [https://micropython.org/download/rp2-pico/](https://micropython.org/download/rp2-pico/)
+![Download Firmware](Assets/download.png)
+
+https://micropython.org/download/rp2-pico/
+
+---
 
 ## Step 2: Enter BOOTSEL Mode
-   
+
 1. Press and hold the **BOOTSEL** button.
-    
-2. While holding the button, connect the Pico to your computer using the USB cable.
-    
-3. Release the button after the board is detected.
-    
-![[rp1-rp2.png]]
+2. While holding the button, connect the Pico to your computer using a USB cable.
+3. Release the button once the board is detected.
+
+![BOOTSEL Mode](Assets/rp1-rp2.png)
+
 The Pico will appear as a USB mass storage device named **RPI-RP2**.
+
+---
 
 ## Step 3: Flash the Firmware
 
 1. Copy the downloaded `.uf2` firmware file onto the **RPI-RP2** drive.
-![[pico-drive.png]]
-    
-2. Wait a few seconds.
-    
 
-![[Transfer.png]]
+![RPI-RP2 Drive](Assets/pico-drive.png)
+
+2. Wait a few seconds for the file transfer to complete.
+
+![Copy Firmware](Assets/Transfer.png)
 
 The board will automatically reboot and the **RPI-RP2** drive will disappear.
 
 MicroPython is now installed.
 
+---
+
 ## Step 4: Verify the Installation
 
 Open **Thonny IDE**.
 
-Navigate to:
+Navigate to
 
 ```
 Run → Select Interpreter
 ```
 
-Choose:
+Choose
 
 ```
 MicroPython (Raspberry Pi Pico)
@@ -105,8 +102,11 @@ MicroPython (Raspberry Pi Pico)
 
 Click **OK**.
 
-![[Thonny.png]]
-Open the Shell. If the installation was successful, you should see the MicroPython REPL:
+![Thonny IDE](Assets/Thonny.png)
+
+Open the Shell.
+
+If everything is installed correctly, you'll see something similar to
 
 ```python
 MicroPython v1.xx.x on 202x-xx-xx
@@ -116,55 +116,55 @@ Type "help()" for more information.
 
 Congratulations! Your Raspberry Pi Pico is now ready to run MicroPython programs.
 
-![[verification.png]]
+![MicroPython Verification](Assets/verification.png)
 
 ---
 
 # Installing CircuitPython
 
-CircuitPython is a beginner-friendly fork of MicroPython developed by Adafruit. It emphasizes ease of use by allowing users to edit files directly on the board's USB storage without requiring a separate upload process.
+CircuitPython is a beginner-friendly fork of MicroPython developed by Adafruit. It allows you to edit files directly on the Pico without uploading firmware every time you make changes.
 
 ## Requirements
 
 - Raspberry Pi Pico
-    
-- USB Type-A to Micro-USB data cable
-    
+- USB Type-A to Micro-USB cable
 - A computer running Windows, Linux, or macOS
-    
 - Latest CircuitPython UF2 firmware
-    
 
 ## Step 1: Download the Firmware
-![[download.png]]
-Download the latest CircuitPython firmware for the Raspberry Pi Pico from Adafruit.
 
-> [https://circuitpython.org/board/raspberry_pi_pico/](https://circuitpython.org/board/raspberry_pi_pico/)
+Download the latest CircuitPython firmware.
+
+![Download Firmware](Assets/download.png)
+
+https://circuitpython.org/board/raspberry_pi_pico/
+
+---
 
 ## Step 2: Enter BOOTSEL Mode
 
 1. Disconnect the Pico.
-    
 2. Hold the **BOOTSEL** button.
-    
 3. Connect the Pico to your computer.
-    
 4. Release the button.
-    
 
 The board will appear as **RPI-RP2**.
 
+---
+
 ## Step 3: Flash the Firmware
 
-Copy the downloaded CircuitPython `.uf2` file onto the **RPI-RP2** drive.
-![[cktpy-firmwhere.png]]
+Copy the downloaded CircuitPython `.uf2` file to the **RPI-RP2** drive.
 
+![Copy CircuitPython Firmware](Assets/cktpy-firmwhere.png)
 
-The Pico will automatically reboot after the file transfer is complete.
+The board will reboot automatically.
+
+---
 
 ## Step 4: Verify the Installation
 
-After rebooting, a new USB drive named:
+After rebooting, a new USB drive named
 
 ```
 CIRCUITPY
@@ -172,12 +172,13 @@ CIRCUITPY
 
 will appear.
 
+![CIRCUITPY Drive](Assets/cktpy-frmwhere.png)
+
 This confirms that CircuitPython has been installed successfully.
-![[cktpy-frmwhere.png]]
 
-![[cktpy-ssfl.png]]
+![CircuitPython Files](Assets/cktpy-ssfl.png)
 
-Inside the drive you will find files similar to:
+Inside the drive you'll find files similar to
 
 ```
 boot_out.txt
@@ -185,32 +186,31 @@ code.py
 lib/
 ```
 
-The file `code.py` is executed automatically every time the board starts. Simply edit and save this file to run your program.
+The `code.py` file runs automatically whenever the Pico powers on.
+
+---
 
 ## Using Thonny with CircuitPython
 
-1. Open **Thonny IDE**.
-    
-2. Navigate to:
-    
+Open **Thonny IDE**.
+
+Navigate to
 
 ```
 Run → Select Interpreter
 ```
 
-3. Select:
-    
+Select
 
 ```
-CircuitPython (generic)
+CircuitPython (Generic)
 ```
 
 or the appropriate CircuitPython interpreter available in your version of Thonny.
 
-4. Open the Shell to access the CircuitPython REPL.
-    
+Open the Shell.
 
-You should see:
+You should see
 
 ```python
 Adafruit CircuitPython x.x.x on 202x-xx-xx
@@ -219,18 +219,35 @@ Adafruit CircuitPython x.x.x on 202x-xx-xx
 
 Your Raspberry Pi Pico is now ready for CircuitPython development.
 
+---
 
+# How to View Files Inside the Raspberry Pi Pico
 
-----
-# How to View Files Inside Pico 
+## Using Thonny (Recommended)
 
-## Using Thonny (Easiest)
+1. Connect the Raspberry Pi Pico to your computer.
+2. Open **Thonny IDE**.
+3. Navigate to
 
-1. Connect your Pico to your computer.
-2. Open **Thonny**.
-3. Go to **View → Files**.
-![[File1.png]]
-4. In the **Files** pane, select **MicroPython device** or **CircuitPython Device**
-![[File2.png]]
-5. You'll see the files stored on the Pico (e.g., `main.py`, `boot.py`, other `.py` files).
-6. Right-click the file you want to delete and choose **Delete**.
+```
+View → Files
+```
+
+![Open Files Panel](Assets/File1.png)
+
+4. Select **MicroPython Device** or **CircuitPython Device**.
+
+![Pico File System](Assets/File2.png)
+
+5. You'll see all files stored on the Pico, including
+
+- `boot.py`
+- `main.py`
+- `code.py` (CircuitPython)
+- Other Python files
+
+6. To delete a file, right-click it and select **Delete**.
+
+---
+
+Happy Hacking! 🚀
