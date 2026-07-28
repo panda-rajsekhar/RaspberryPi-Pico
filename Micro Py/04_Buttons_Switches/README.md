@@ -50,9 +50,9 @@ In this experiment, the onboard LED directly follows the button state.
 
 ![Button Demo](Assets/button.gif)
 
-### Hardware
 
-![Button](Assets/button.jpg)
+
+
 
 ---
 
@@ -121,9 +121,7 @@ Key Pressed: A
 Key Pressed: #
 ```
 
-### Demonstration
 
-![Keypad Demo](Assets/keypad.gif)
 
 ### Hardware
 
@@ -146,6 +144,12 @@ In this experiment, numeric keys control the Raspberry Pi Pico onboard LED.
 | 9 | Blink nine times |
 
 Special keys (`A`, `B`, `C`, `D`, `*`, `#`) are ignored.
+
+### Demonstration
+
+![Keypad Demo](Assets/keypad.gif)
+
+
 
 This demonstrates how keypad input can be converted into program logic rather than simply displaying characters.
 
