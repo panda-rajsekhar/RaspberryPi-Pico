@@ -2,6 +2,9 @@
 
 > 🚧 **Documentation is currently under construction.**
 
+<p align="center">
+    <img src="assets/under construction.png" width="450">
+</p>
 This module is actively being developed as part of the Raspberry Pi Pico repository.
 
 ### Current Progress
