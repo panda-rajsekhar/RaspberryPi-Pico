@@ -160,6 +160,9 @@ The architecture can be adapted for:
 
 ---
 
+## Project Status
+This project currently implements the user interface for a Raspberry Pi Pico resource monitor. The focus is on embedded UI design, reusable widgets, optimized graphics rendering, and smooth screen updates. Real-time resource acquisition and backend integration will be added in future iterations.
+
 ## Future Improvements
 
 Planned additions include:
