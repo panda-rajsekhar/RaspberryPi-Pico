@@ -482,5 +482,19 @@ class ST7735:
             )
 
             x += 6 * size
+    # -------------------------------------------------
+    # Write Raw RGB565 Buffer
+    # -------------------------------------------------
+
+    def write_buffer(self, buffer):
+
+        self.cs.low()
+        self.dc.high()
+
+        self.spi.write(buffer)
+
+        self.cs.high()
+
+
     
     
