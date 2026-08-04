@@ -1,0 +1,361 @@
+# 09 – SD Card Storage Expansion for Raspberry Pi Pico
+
+Extending the Raspberry Pi Pico graphics framework with external microSD storage over SPI.
+
+---
+
+## Preview
+
+<p align="center">
+  <img src="assets/00_sd_cardslot.jpg" width="500"><br>
+  <b>ST7735 TFT module with integrated microSD card slot</b>
+</p>
+
+<p align="center">
+  <img src="assets/02_output.jpg" width="500"><br>
+  <b>PIMG image rendered directly from the microSD card</b>
+</p>
+
+---
+
+## Overview
+
+The previous experiment, **08_TFT_PICO_Image_Processing**, introduced a custom graphics framework for the Raspberry Pi Pico featuring the **PIMG (Pico Image)** format and a lightweight image engine capable of efficiently rendering RGB565 images on an ST7735 TFT display.
+
+While the graphics engine performed well, every image asset was stored inside the Pico's onboard flash memory. Since the RP2040 provides only limited internal storage, this approach quickly becomes impractical for applications requiring numerous graphical resources such as:
+
+- Icons
+- Logos
+- Splash screens
+- Background images
+- Animations
+- Fonts
+- Configuration files
+- Data logs
+
+To remove this storage limitation, this experiment integrates a microSD card using the SPI interface.
+
+Rather than dedicating another communication peripheral, the SD card shares the same SPI bus already used by the TFT display. Each device maintains an independent Chip Select (CS) line, allowing both peripherals to coexist without communication conflicts.
+
+The most significant result is that the previously developed PIMG image engine requires **no modification whatsoever**. Since it already operates on standard file paths, image assets can simply be loaded from `/sd/...` instead of internal flash.
+
+This transforms the graphics framework into a scalable embedded graphics platform capable of supporting significantly larger projects.
+
+---
+
+## Objectives
+
+This experiment demonstrates how to:
+
+- Interface a microSD card with the Raspberry Pi Pico
+- Share the SPI bus between the TFT display and SD card
+- Mount and unmount a FAT filesystem
+- Verify successful SD card communication
+- Perform standard file operations
+- Move graphical assets from internal flash to external storage
+- Render PIMG images directly from the SD card
+- Prepare the graphics framework for future GUI applications
+
+---
+
+## Repository Structure
+
+```
+09_SD_Card_Storage_Expansion
+│
+├── display.py
+├── mount_sd.py
+├── move.py
+├── sd_verification.py
+├── unmount_sd.py
+│
+├── assets
+│   ├── 00_sd_cardslot.jpg
+│   ├── 01_circuit_wiring.jpg
+│   └── 02_output.jpg
+│
+└── driver
+    └── sdcard.py
+```
+
+---
+
+## Hardware Required
+
+| Component                                 | Quantity     |
+|--------------------------------------------|-------------|
+| Raspberry Pi Pico                          | 1           |
+| ST7735 TFT Display (with microSD slot)     | 1           |
+| microSD Card (FAT/FAT32)                   | 1           |
+| Jumper Wires                                | As required |
+| USB Cable                                   | 1           |
+
+---
+
+## Hardware Connections
+
+The TFT display and microSD card share the **SPI0** peripheral of the Raspberry Pi Pico. Only the Chip Select pins differ.
+
+```
+                SPI0 BUS
+
+          +-------------------+
+          | Raspberry Pi Pico |
+          +-------------------+
+             │      │      │
+          SCK│   MOSI│   MISO
+             │      │      │
+      ┌──────┘      │      └────────┐
+      │             │               │
+      ▼             ▼               ▼
+
+  ST7735 TFT                    microSD Card
+   CS = GP17                     CS = GP5
+```
+
+### TFT Connections
+
+| Raspberry Pi Pico | TFT Display |
+|--------------------|-------------|
+| GP18               | SCK         |
+| GP19               | MOSI        |
+| GP21               | DC          |
+| GP20               | RESET       |
+| GP17               | TFT_CS      |
+| 3V3                | VCC         |
+| 3V3                | LED         |
+| GND                | GND         |
+
+### microSD Connections
+
+| Raspberry Pi Pico | microSD |
+|--------------------|---------|
+| GP18               | SCK     |
+| GP19               | MOSI    |
+| GP16               | MISO    |
+| GP5                | CS      |
+| 3V3                | VCC     |
+| GND                | GND     |
+
+### Circuit Wiring
+
+<p align="center">
+  <img src="assets/01_circuit_wiring.jpg" width="700">
+</p>
+
+---
+
+## Step 1 — Verifying SD Card Communication
+
+Before mounting the filesystem, the SPI interface should be tested.
+
+The script `sd_verification.py` initializes the SD card, verifies communication, mounts the filesystem, and displays the detected files.
+
+**Example output:**
+
+```
+--------------------------------
+SD Card Status
+--------------------------------
+Status : Mounted
+Mount  : /sd
+--------------------------------
+Contents
+ - System Volume Information
+ - pico.txt
+ - test.pimg
+ - test.text
+--------------------------------
+```
+
+Successful execution confirms:
+
+- Correct SPI communication
+- Correct Chip Select configuration
+- SD card detection
+- FAT filesystem accessibility
+
+---
+
+## Step 2 — Mounting the Filesystem
+
+The script `mount_sd.py` mounts the SD card to `/sd`.
+
+Once mounted, the SD card behaves like a normal directory:
+
+```python
+import os
+
+os.listdir("/sd")
+
+with open("/sd/file.txt") as f:
+    print(f.read())
+```
+
+Every graphical asset stored on the SD card can now be accessed through standard MicroPython file operations.
+
+---
+
+## Step 3 — Unmounting the Filesystem
+
+Before removing the SD card, the filesystem should always be unmounted:
+
+```python
+os.umount("/sd")
+```
+
+This is implemented in `unmount_sd.py`.
+
+Unmounting ensures:
+
+- Pending writes are completed
+- File corruption is avoided
+- Safe removal of the SD card
+
+> **Important**
+> Never remove the SD card while it is still mounted.
+
+---
+
+## Step 4 — Moving Image Assets
+
+Initially, images reside inside the Pico's internal flash memory.
+
+```
+Internal Flash
+      │
+      ▼
+ test.pimg
+```
+
+The script `move.py` copies the file to the SD card.
+
+```
+Internal Flash
+      │
+      ▼
+ test.pimg
+      │
+      ▼
+ microSD Card
+      │
+      ▼
+ /sd/test.pimg
+```
+
+After verifying the copy, the original file may optionally be removed to recover internal flash space.
+
+---
+
+## Step 5 — Rendering Images from the SD Card
+
+One of the biggest advantages of the PIMG engine is that no changes are required.
+
+**Previously:**
+
+```python
+img = Image("test.pimg")
+```
+
+**Now:**
+
+```python
+img = Image("/sd/test.pimg")
+img.draw(display, 0, 0)
+```
+
+The image is streamed directly from the SD card in small chunks, eliminating the need to load the complete image into RAM.
+
+This provides:
+
+- Lower RAM usage
+- Smaller flash usage
+- Support for larger image collections
+- Better scalability
+
+---
+
+## Experimental Output
+
+The image below shows successful rendering of a PIMG image directly from the SD card.
+
+<p align="center">
+  <img src="assets/02_output.jpg" width="500">
+</p>
+
+---
+
+## Advantages of External Storage
+
+Compared to storing graphical assets in internal flash memory, external storage offers significant benefits.
+
+| Internal Flash          | microSD Card                  |
+|--------------------------|--------------------------------|
+| Limited capacity          | Expandable storage            |
+| Difficult to update       | Easy asset replacement        |
+| Small image library       | Virtually unlimited resources |
+| Uses onboard flash        | Preserves flash memory        |
+| Limited scalability       | Suitable for large GUI projects |
+
+Possible applications include:
+
+- Large icon libraries
+- Fonts
+- Splash screens
+- Image galleries
+- Animations
+- Configuration files
+- Sensor logging
+- User data
+- Future embedded GUI systems
+
+---
+
+## Results
+
+This experiment successfully demonstrates:
+
+- ✅ Shared SPI communication between TFT display and microSD card
+- ✅ FAT filesystem support in MicroPython
+- ✅ Reliable SD card initialization
+- ✅ Safe mounting and unmounting procedures
+- ✅ Standard file operations on external storage
+- ✅ Migration of graphical assets from flash memory
+- ✅ Direct rendering of PIMG images from the SD card
+- ✅ Seamless compatibility with the graphics framework developed in `08_TFT_PICO_Image_Processing`
+
+---
+
+## Conclusion
+
+This experiment extends the custom Raspberry Pi Pico graphics framework by introducing external storage through a microSD card.
+
+By sharing the SPI bus with the ST7735 TFT display, the system gains virtually unlimited storage expansion without requiring additional communication peripherals. Since the PIMG engine operates entirely on file paths, images stored on the SD card can be rendered exactly as those stored in internal flash, requiring no architectural changes to the rendering engine.
+
+With SD card support integrated, the framework is now capable of supporting substantially larger embedded graphics projects, including dashboards, image libraries, animations, configuration management, and future GUI systems.
+
+This experiment establishes the storage layer that future projects in this series will build upon.
+
+---
+
+
+## Author
+
+Developed and maintained by **Rajsekhar Panda** as part of the **Raspberry Pi Pico Projects** series.
+
+This repository documents practical embedded systems development using the Raspberry Pi Pico, with a focus on building modular, reusable, and well-documented software components for future embedded applications.
+
+**GitHub:** https://github.com/panda-rajsekhar
+
+---
+
+## License
+
+This project is licensed under the **MIT License**, which permits anyone to use, modify, distribute, and sublicense the software with minimal restrictions, provided that the original copyright notice and license are included.
+
+See the [LICENSE](LICENSE) file for the complete license text.
+
+---
+
+⭐ If you found this project helpful, consider starring the repository on GitHub. Your support helps the project reach more developers and encourages future development.
+```
