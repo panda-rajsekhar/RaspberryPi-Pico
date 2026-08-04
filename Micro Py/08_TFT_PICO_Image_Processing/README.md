@@ -59,6 +59,7 @@ This approach offers:
 - Zero framebuffer rendering
 - Direct SPI image transfer
 - ST7735 compatible
+- Gui based input file selection
 
 ---
 
