@@ -1,6 +1,6 @@
 # 09 – SD Card Storage Expansion for Raspberry Pi Pico
 
-Extending the Raspberry Pi Pico graphics framework with external microSD storage over SPI.
+Extending the Raspberry Pi Pico graphics framework with external SD storage over SPI.
 
 ---
 
@@ -8,12 +8,12 @@ Extending the Raspberry Pi Pico graphics framework with external microSD storage
 
 <p align="center">
   <img src="assets/00_sd_cardslot.jpg" width="500"><br>
-  <b>ST7735 TFT module with integrated microSD card slot</b>
+  <b>ST7735 TFT module with integrated SD card slot</b>
 </p>
 
 <p align="center">
   <img src="assets/02_output.jpg" width="500"><br>
-  <b>PIMG image rendered directly from the microSD card</b>
+  <b>PIMG image rendered directly from the SD card</b>
 </p>
 
 ---
@@ -33,7 +33,7 @@ While the graphics engine performed well, every image asset was stored inside th
 - Configuration files
 - Data logs
 
-To remove this storage limitation, this experiment integrates a microSD card using the SPI interface.
+To remove this storage limitation, this experiment integrates a SD card using the SPI interface.
 
 Rather than dedicating another communication peripheral, the SD card shares the same SPI bus already used by the TFT display. Each device maintains an independent Chip Select (CS) line, allowing both peripherals to coexist without communication conflicts.
 
@@ -47,7 +47,7 @@ This transforms the graphics framework into a scalable embedded graphics platfor
 
 This experiment demonstrates how to:
 
-- Interface a microSD card with the Raspberry Pi Pico
+- Interface a SD card with the Raspberry Pi Pico
 - Share the SPI bus between the TFT display and SD card
 - Mount and unmount a FAT filesystem
 - Verify successful SD card communication
@@ -82,19 +82,19 @@ This experiment demonstrates how to:
 
 ## Hardware Required
 
-| Component                                 | Quantity     |
+| Component                                  | Quantity    |
 |--------------------------------------------|-------------|
 | Raspberry Pi Pico                          | 1           |
-| ST7735 TFT Display (with microSD slot)     | 1           |
-| microSD Card (FAT/FAT32)                   | 1           |
-| Jumper Wires                                | As required |
-| USB Cable                                   | 1           |
+| ST7735 TFT Display (with SD slot)          | 1           |
+| SD Card (FAT/FAT32)                        | 1           |
+| Jumper Wires                               | As required |
+| USB Cable                                  | 1           |
 
 ---
 
 ## Hardware Connections
 
-The TFT display and microSD card share the **SPI0** peripheral of the Raspberry Pi Pico. Only the Chip Select pins differ.
+The TFT display and SD card share the **SPI0** peripheral of the Raspberry Pi Pico. Only the Chip Select pins differ.
 
 ```
                 SPI0 BUS
@@ -109,7 +109,7 @@ The TFT display and microSD card share the **SPI0** peripheral of the Raspberry 
       │             │               │
       ▼             ▼               ▼
 
-  ST7735 TFT                    microSD Card
+  ST7735 TFT                    SD Card
    CS = GP17                     CS = GP5
 ```
 
@@ -126,9 +126,9 @@ The TFT display and microSD card share the **SPI0** peripheral of the Raspberry 
 | 3V3                | LED         |
 | GND                | GND         |
 
-### microSD Connections
+### SD Connections
 
-| Raspberry Pi Pico | microSD |
+| Raspberry Pi Pico | SD |
 |--------------------|---------|
 | GP18               | SCK     |
 | GP19               | MOSI    |
@@ -237,7 +237,7 @@ Internal Flash
  test.pimg
       │
       ▼
- microSD Card
+  SD Card
       │
       ▼
  /sd/test.pimg
@@ -289,7 +289,7 @@ The image below shows successful rendering of a PIMG image directly from the SD 
 
 Compared to storing graphical assets in internal flash memory, external storage offers significant benefits.
 
-| Internal Flash          | microSD Card                  |
+| Internal Flash           | SD Card                         |
 |--------------------------|--------------------------------|
 | Limited capacity          | Expandable storage            |
 | Difficult to update       | Easy asset replacement        |
@@ -315,7 +315,7 @@ Possible applications include:
 
 This experiment successfully demonstrates:
 
-- ✅ Shared SPI communication between TFT display and microSD card
+- ✅ Shared SPI communication between TFT display and SD card
 - ✅ FAT filesystem support in MicroPython
 - ✅ Reliable SD card initialization
 - ✅ Safe mounting and unmounting procedures
