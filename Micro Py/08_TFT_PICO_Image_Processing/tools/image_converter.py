@@ -2,19 +2,41 @@
 
 from PIL import Image
 import struct
+import os
+from tkinter import Tk, filedialog
 
 # ============================================================
 # Configuration
 # ============================================================
-
-INPUT_FILE = "../assets/logo.png"
-OUTPUT_FILE = "../assets/logo.pimg"
 
 OUTPUT_WIDTH = 128
 OUTPUT_HEIGHT = 160
 
 MAGIC = b"PIMG"
 PIXEL_FORMAT = 0x01  # RGB565
+
+
+# ============================================================
+# Select Input Image
+# ============================================================
+
+def select_image():
+
+    root = Tk()
+    root.withdraw()
+
+    filename = filedialog.askopenfilename(
+        title="Select an Image",
+        filetypes=[
+            ("Image Files", "*.png *.jpg *.jpeg *.bmp *.gif *.tif *.tiff *.webp"),
+            ("All Files", "*.*")
+        ]
+    )
+
+    if not filename:
+        raise SystemExit("No image selected.")
+
+    return filename
 
 
 # ============================================================
@@ -128,7 +150,18 @@ def write_pimg(image, filename):
 
 def main():
 
-    image = load_image(INPUT_FILE)
+    # Select input image
+    input_file = select_image()
+
+    # Create output filename
+    directory = os.path.dirname(input_file)
+    basename = os.path.splitext(os.path.basename(input_file))[0]
+    output_file = os.path.join(directory, f"{basename}_pimg.pimg")
+
+    print(f"\nInput  : {input_file}")
+    print(f"Output : {output_file}")
+
+    image = load_image(input_file)
 
     image_info(image)
 
@@ -140,7 +173,7 @@ def main():
 
     image_info(image)
 
-    write_pimg(image, OUTPUT_FILE)
+    write_pimg(image, output_file)
 
 
 if __name__ == "__main__":
