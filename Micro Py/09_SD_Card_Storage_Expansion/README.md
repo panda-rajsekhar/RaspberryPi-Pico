@@ -326,6 +326,138 @@ This experiment successfully demonstrates:
 
 ---
 
+## `move.py` — Interactive Pico to SD File Copy Manager
+
+The `move.py` utility provides an interactive command-line interface for copying files from the Raspberry Pi Pico's internal filesystem to a mounted microSD card. Unlike a fixed copy script, the program dynamically discovers available files and destination folders, allowing multiple copy operations during a single execution.
+
+### Features
+
+- Automatically mounts the microSD card.
+- Detects all files stored in the Pico root directory.
+- Displays an indexed menu for easy file selection.
+- Scans the SD card and lists all available destination folders.
+- Preserves the original filename during the copy operation.
+- Supports consecutive copy operations without restarting the program.
+- Provides input validation for menu selections.
+- Gracefully exits when requested by the user.
+
+### Workflow
+
+1. Mount the SD card.
+2. Display all files available in the Pico root directory.
+3. Select the source file using its corresponding menu number.
+4. Display all destination folders on the SD card.
+5. Select the destination folder.
+6. Copy the selected file while preserving its original filename.
+7. Prompt the user to either continue copying additional files or exit the program.
+
+### Example Execution
+
+```text
+========================================
+        PICO SD FILE COPY MANAGER
+========================================
+
+Files available in Pico root:
+
+1. arb.py
+2. colors.py
+3. fonts.py
+4. image.py
+5. keypad.py
+6. lcd_api.py
+7. main.py
+8. mount_sd.py
+9. move.py
+10. sd_speed_test.py
+11. sd_verification.py
+12. sdcard.py
+13. st7735.py
+14. test.py
+15. unmount_sd.py
+16. widgets.py
+17. write.py
+
+0. Exit
+
+Select file number: 8
+
+Destination folders:
+
+1. Package
+2. Images
+3. System Volume Information
+
+0. Cancel
+
+Select destination folder: 1
+
+Copying...
+✅ Copy completed.
+
+Source      : /mount_sd.py
+Destination : /sd/Package/mount_sd.py
+
+Copy another file? (Y/N): y
+
+========================================
+        PICO SD FILE COPY MANAGER
+========================================
+
+Files available in Pico root:
+
+1. arb.py
+2. colors.py
+3. fonts.py
+4. image.py
+5. keypad.py
+6. lcd_api.py
+7. main.py
+8. mount_sd.py
+9. move.py
+10. sd_speed_test.py
+11. sd_verification.py
+12. sdcard.py
+13. st7735.py
+14. test.py
+15. unmount_sd.py
+16. widgets.py
+17. write.py
+
+0. Exit
+
+Select file number: 10
+
+Destination folders:
+
+1. Package
+2. Images
+3. System Volume Information
+
+0. Cancel
+
+Select destination folder: 1
+
+Copying...
+✅ Copy completed.
+
+Source      : /sd_speed_test.py
+Destination : /sd/Package/sd_speed_test.py
+
+Copy another file? (Y/N): n
+
+Exiting File Manager...
+```
+
+### Notes
+
+- Files are copied using a buffered read/write operation, minimizing RAM usage on the RP2040.
+- The destination filename is automatically preserved, eliminating the need for manual filename entry.
+- The utility is designed as a reusable file management tool and serves as a foundation for future filesystem operations such as file moving, renaming, deletion, directory creation, and storage management.
+
+
+---
+
 ## Conclusion
 
 This experiment extends the custom Raspberry Pi Pico graphics framework by introducing external storage through a microSD card.
