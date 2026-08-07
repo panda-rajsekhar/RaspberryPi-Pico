@@ -8,7 +8,33 @@ running MicroPython.
 
 ---
 
-## Project Preview ### Hardware Setup ![Hardware Setup](Assets/00_Setup.jpg) --- ### Display Controls ![Controls](Assets/01_Display_Controls.jpg) --- ### Start Screen ![Start Screen](Assets/02_Start_screen.jpg) --- ### Master Treat The special bonus treat appears periodically and awards additional points. ![Master Treat](Assets/03_Master_Eat.jpg) --- ### Pause Screen Pause the game at any time without losing progress. ![Pause](Assets/04_Pause.jpg) --- ### Game Over Game over screen displaying the final score and allowing the player to restart. ![Game Over](Assets/05_Game_Over.jpg) ---
+## Project Preview ### Hardware Setup 
+
+![Hardware Setup](Assets/00_Setup.jpg) 
+
+--- 
+
+### Display Controls ![Controls](Assets/01_Display_Controls.jpg)
+
+---
+
+### Start Screen ![Start Screen](Assets/02_Start_screen.jpg) 
+
+--- 
+
+### Master Treat The special bonus treat appears periodically and awards additional points. 
+![Master Treat](Assets/03_Master_Eat.jpg) 
+
+--- 
+
+### Pause Screen Pause the game at any time without losing progress. 
+![Pause](Assets/04_Pause.jpg) 
+
+--- ### Game Over Game over screen displaying the final score and allowing the player to restart. 
+
+![Game Over](Assets/05_Game_Over.jpg) 
+
+---
 
 
 
