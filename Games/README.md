@@ -49,36 +49,11 @@ don't need all of them to run any single game.
 ## Current Repo Layout
 
 ```
-PS D:\Games> tree /f
-Folder PATH listing for volume New Volume
-Volume serial number is 0000000A 6846:8396
-D:.
+Games
 │   README.md
-│
-├───.obsidian
-│       app.json
-│       appearance.json
-│       core-plugins.json
-│       workspace.json
-│
-└───01_Snake_MicroPython
-    │   README.md
-    │   snake.py
-    │
-    ├───Assets
-    │       00_Setup.jpg
-    │       01_Display_Controls.jpg
-    │       02_Start_screen.jpg
-    │       03_Master_Eat.jpg
-    │       04_Pause.jpg
-    │       05_Game_Over.jpg
-    │
-    └───Driver
-            colors.py
-            keypad.py
-            st7735_dev.py
+└───/01_Snake_MicroPython
+└───/02_Dino_Run_MicroPython
 
-PS D:\Games>
 ```
 
 Every game is self-contained in its own folder and only imports the drivers
@@ -98,6 +73,7 @@ it actually needs from `drivers/`.
 
 > Each game folder has its own short README covering exact wiring, controls,
 > and any game-specific constants worth tuning.
+> The above mentioned projects are key highlight and I have many more planned. 
 
 ---
 
