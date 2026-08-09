@@ -193,7 +193,7 @@ ST7735(
 ### Wiring discrepancy
 
 During bring-up, the original test script contained a stale comment indicating `C → GP5`, while the actual working code used `GP9`.
-
+> Because GP5 is used for the SD Card Operations!
 Testing confirmed that **GP9 is the correct working connection for Button C**.
 
 Therefore:
@@ -474,15 +474,9 @@ colors.py
 fonts.py
 widgets_dev.py
 ```
-
-They must be available in the same directory on the Pico filesystem because the drivers use flat imports such as:
-
-```python
-from colors import *
-from fonts import *
-```
-
-They can either be placed directly in the Pico filesystem root or inside `/lib`.
+The fonts and colors can be obtained from the 6th chapter : `06_1.8inch_TFT_LCD` in the `lcd` section
+The Latest Files with `_dev` identification mark is in the Games Section in the 1st Games Driver Section 
+I am not going to upload the same files again in different projects, I don't think so its a good habit to upload the same file again and again. 
 
 ---
 
