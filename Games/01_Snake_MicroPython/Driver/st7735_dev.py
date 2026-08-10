@@ -493,6 +493,41 @@ class ST7735:
 
                 x -= 1
                 decision += ((y - x) << 1) + 1
+
+    # -------------------------------------------------
+    # Fill Circle (Midpoint Circle Algorithm)
+    # -------------------------------------------------
+
+    def fill_circle(self, xc, yc, radius, color):
+
+        if radius <= 0:
+            return
+
+        x = radius
+        y = 0
+        decision = 1 - radius
+
+        while x >= y:
+
+            # Each draw_line call here has y0 == y1, so it auto-routes
+            # to the fast draw_hline path (single set_window + burst
+            # write per row) instead of the slow per-pixel Bresenham walk.
+            self.draw_line(xc - x, yc + y, xc + x, yc + y, color)
+            self.draw_line(xc - x, yc - y, xc + x, yc - y, color)
+            self.draw_line(xc - y, yc + x, xc + y, yc + x, color)
+            self.draw_line(xc - y, yc - x, xc + y, yc - x, color)
+
+            y += 1
+
+            if decision < 0:
+
+                decision += (y << 1) + 1
+
+            else:
+
+                x -= 1
+                decision += ((y - x) << 1) + 1
+
     # -------------------------------------------------
     # Draw Triangle
     # -------------------------------------------------
@@ -824,4 +859,3 @@ class ST7735:
         self.pixel_buffer[1] = color & 0xFF
 
         self.spi.write(self.pixel_buffer)
-
