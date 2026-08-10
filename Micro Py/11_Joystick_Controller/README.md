@@ -68,11 +68,9 @@ The display converts the raw ADC readings into a normalized **−100 to +100** r
 
 ### Movement 3
 
-![Joystick Movement 3](assets/04_joystick_movement_3.jpg)
+![Joystick Movement 3](assets/04_joystick_movement_4.jpg)
 
-### Movement 4
 
-![Joystick Movement 4](assets/04_joystick_movement_4.jpg)
 
 Supported direction states include:
 
