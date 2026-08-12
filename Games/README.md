@@ -53,6 +53,8 @@ Games
 │   README.md
 └───/01_Snake_MicroPython
 └───/02_Dino_Run_MicroPython
+└───/03_Tetris_MicroPython 
+
 
 ```
 
