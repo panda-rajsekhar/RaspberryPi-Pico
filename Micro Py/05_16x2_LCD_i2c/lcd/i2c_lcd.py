@@ -1,86 +1,95 @@
-import utime
-import gc
+"""
+PCF8574 I2C backpack backend for an HD44780 character LCD.
 
+Typical PCF8574 backpack mapping used by this driver:
+    P0 -> RS
+    P1 -> RW
+    P2 -> E
+    P3 -> Backlight
+    P4..P7 -> LCD D4..D7
+
+RW is kept low because the common PCF8574 backpack wiring does not
+provide useful LCD-busy reads through this driver.
+"""
+
+import time
 from lcd_api import LcdApi
-from machine import I2C
 
-# PCF8574 pin definitions
-MASK_RS = 0x01       # P0
-MASK_RW = 0x02       # P1
-MASK_E  = 0x04       # P2
-
-SHIFT_BACKLIGHT = 3  # P3
-SHIFT_DATA      = 4  # P4-P7
 
 class I2cLcd(LcdApi):
-    
-    #Implements a HD44780 character LCD connected via PCF8574 on I2C
+    # PCF8574 output bits
+    RS = 0x01
+    RW = 0x02
+    ENABLE = 0x04
+    BACKLIGHT = 0x08
+    DATA_SHIFT = 4
 
-    def __init__(self, i2c, i2c_addr, num_lines, num_columns):
+    def __init__(self, i2c, address, rows=2, cols=16):
         self.i2c = i2c
-        self.i2c_addr = i2c_addr
-        self.i2c.writeto(self.i2c_addr, bytes([0]))
-        utime.sleep_ms(20)   # Allow LCD time to powerup
-        # Send reset 3 times
-        self.hal_write_init_nibble(self.LCD_FUNCTION_RESET)
-        utime.sleep_ms(5)    # Need to delay at least 4.1 msec
-        self.hal_write_init_nibble(self.LCD_FUNCTION_RESET)
-        utime.sleep_ms(1)
-        self.hal_write_init_nibble(self.LCD_FUNCTION_RESET)
-        utime.sleep_ms(1)
-        # Put LCD into 4-bit mode
-        self.hal_write_init_nibble(self.LCD_FUNCTION)
-        utime.sleep_ms(1)
-        LcdApi.__init__(self, num_lines, num_columns)
-        cmd = self.LCD_FUNCTION
-        if num_lines > 1:
-            cmd |= self.LCD_FUNCTION_2LINES
-        self.hal_write_command(cmd)
-        gc.collect()
+        self.address = address
+        self._backlight = True
 
-    def hal_write_init_nibble(self, nibble):
-        # Writes an initialization nibble to the LCD.
-        # This particular function is only used during initialization.
-        byte = ((nibble >> 4) & 0x0f) << SHIFT_DATA
-        self.i2c.writeto(self.i2c_addr, bytes([byte | MASK_E]))
-        self.i2c.writeto(self.i2c_addr, bytes([byte]))
-        gc.collect()
-        
-    def hal_backlight_on(self):
-        # Allows the hal layer to turn the backlight on
-        self.i2c.writeto(self.i2c_addr, bytes([1 << SHIFT_BACKLIGHT]))
-        gc.collect()
-        
-    def hal_backlight_off(self):
-        #Allows the hal layer to turn the backlight off
-        self.i2c.writeto(self.i2c_addr, bytes([0]))
-        gc.collect()
-        
-    def hal_write_command(self, cmd):
-        # Write a command to the LCD. Data is latched on the falling edge of E.
-        byte = ((self.backlight << SHIFT_BACKLIGHT) |
-                (((cmd >> 4) & 0x0f) << SHIFT_DATA))
-        self.i2c.writeto(self.i2c_addr, bytes([byte | MASK_E]))
-        self.i2c.writeto(self.i2c_addr, bytes([byte]))
-        byte = ((self.backlight << SHIFT_BACKLIGHT) |
-                ((cmd & 0x0f) << SHIFT_DATA))
-        self.i2c.writeto(self.i2c_addr, bytes([byte | MASK_E]))
-        self.i2c.writeto(self.i2c_addr, bytes([byte]))
-        if cmd <= 3:
-            # The home and clear commands require a worst case delay of 4.1 msec
-            utime.sleep_ms(5)
-        gc.collect()
+        # One reusable 1-byte buffer avoids allocating a new bytes object
+        # for every I2C transaction.
+        self._tx = bytearray(1)
 
-    def hal_write_data(self, data):
-        # Write data to the LCD. Data is latched on the falling edge of E.
-        byte = (MASK_RS |
-                (self.backlight << SHIFT_BACKLIGHT) |
-                (((data >> 4) & 0x0f) << SHIFT_DATA))
-        self.i2c.writeto(self.i2c_addr, bytes([byte | MASK_E]))
-        self.i2c.writeto(self.i2c_addr, bytes([byte]))
-        byte = (MASK_RS |
-                (self.backlight << SHIFT_BACKLIGHT) |
-                ((data & 0x0f) << SHIFT_DATA))      
-        self.i2c.writeto(self.i2c_addr, bytes([byte | MASK_E]))
-        self.i2c.writeto(self.i2c_addr, bytes([byte]))
-        gc.collect()
+        # Start with the expander outputs low.
+        self._write_expander(0)
+
+        # HD44780 power-up sequence in 4-bit mode.
+        time.sleep_ms(30)
+        self._init_nibble(0x30)
+        time.sleep_ms(5)
+        self._init_nibble(0x30)
+        time.sleep_ms(1)
+        self._init_nibble(0x30)
+        time.sleep_ms(1)
+        self._init_nibble(0x20)
+        time.sleep_ms(1)
+
+        super().__init__(rows, cols)
+
+    # ---------- PCF8574 transport ----------
+
+    def _write_expander(self, value):
+        if self._backlight:
+            value |= self.BACKLIGHT
+        self._tx[0] = value & 0xFF
+        self.i2c.writeto(self.address, self._tx)
+
+    def _pulse_enable(self, value):
+        self._write_expander(value | self.ENABLE)
+        time.sleep_us(1)
+        self._write_expander(value & ~self.ENABLE)
+        time.sleep_us(1)
+
+    def _send_nibble(self, nibble, rs):
+        value = ((nibble & 0x0F) << self.DATA_SHIFT) | rs
+        # RW stays low: write-only operation.
+        self._pulse_enable(value)
+
+    def _init_nibble(self, command):
+        self._send_nibble((command >> 4) & 0x0F, 0)
+
+    def _write_command(self, value):
+        self._send_nibble((value >> 4) & 0x0F, 0)
+        self._send_nibble(value & 0x0F, 0)
+
+        # CLEAR and HOME are the slow HD44780 commands.
+        if value in (self.CMD_CLEAR, self.CMD_HOME):
+            time.sleep_ms(2)
+
+    def _write_data(self, value):
+        self._send_nibble((value >> 4) & 0x0F, self.RS)
+        self._send_nibble(value & 0x0F, self.RS)
+
+    # ---------- Backlight ----------
+
+    def _backlight_on(self):
+        self._backlight = True
+        self._write_expander(0)
+
+    def _backlight_off(self):
+        self._backlight = False
+        self._write_expander(0)
+
