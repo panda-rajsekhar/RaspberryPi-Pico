@@ -42,7 +42,6 @@ This experiment demonstrates interfacing an **FC-51 IR proximity sensor** with a
 # Project Structure 
 ```
 PS D:\13_FC-51_Object_Detection> 
-│   i2c_lcd.py
 │   README.md
 │   test.py
 │   
