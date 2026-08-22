@@ -2,7 +2,7 @@
 
 A lightweight, fully embedded **image gallery system** built entirely in **MicroPython** for the **Raspberry Pi Pico (RP2040)**. The project combines a custom ST7735 graphics driver, SD card storage, a directory-aware file browser, and a dedicated full-screen image viewer to deliver a responsive, low-latency photo gallery experience on a resource-constrained microcontroller.
 
-Unlike a simple "display one image" demo, this project is built around **embedded graphics architecture**, **efficient SPI rendering**, and **modular software design**, with an explicit eye toward reuse in future Human Machine Interface (HMI) projects — dashboards, menus, sensor UIs, and similar embedded front-ends.
+Unlike a simple "display one image" demo, this project is built around **embedded graphics architecture**, **efficient SPI rendering**, and **modular software design**, with an explicit eye toward reuse in future Human Machine Interface (HMI) projects - dashboards, menus, sensor UIs, and similar embedded front-ends.
 
 ---
 ![MicroPython](https://img.shields.io/badge/MicroPython-2B2728?style=for-the-badge&logo=python&logoColor=white)
@@ -27,13 +27,13 @@ Unlike a simple "display one image" demo, this project is built around **embedde
 
 ## Hardware Used
 
-| Component       | Description                     |
+| Component | Description |
 | --------------- | -------------------------------- |
-| Microcontroller | Raspberry Pi Pico (RP2040)       |
-| Display         | 1.8" ST7735 TFT LCD (128 × 160)  |
-| Storage         | Micro SD Card (SPI Mode)         |
-| Input           | Matrix Keypad                    |
-| Language        | MicroPython                      |
+| Microcontroller | Raspberry Pi Pico (RP2040) |
+| Display | 1.8" ST7735 TFT LCD (128 × 160) |
+| Storage | Micro SD Card (SPI Mode) |
+| Input | Matrix Keypad |
+| Language | MicroPython |
 
 ---
 
@@ -74,24 +74,24 @@ Each software component is designed to perform a single responsibility, allowing
 ├── main.py
 │
 ├── drivers
-│   ├── colors.py
-│   ├── fonts.py
-│   ├── gallery.py
-│   ├── image.py
-│   ├── keypad.py
-│   ├── mount_sd.py
-│   ├── sdcard.py
-│   ├── sd_verification.py
-│   ├── st7735_dev.py
-│   └── widgets_dev.py
+│ ├── colors.py
+│ ├── fonts.py
+│ ├── gallery.py
+│ ├── image.py
+│ ├── keypad.py
+│ ├── mount_sd.py
+│ ├── sdcard.py
+│ ├── sd_verification.py
+│ ├── st7735_dev.py
+│ └── widgets_dev.py
 │
 └── gallery
-    ├── 00_circuit.jpg
-    ├── 01_file_browser_ui.jpg
-    ├── 02_inside_folder_1.jpg
-    ├── 02_inside_folder_2.jpg
-    ├── 03_working_output_1.mp4
-    └── 03_working_output_2.mp4
+ ├── 00_circuit.jpg
+ ├── 01_file_browser_ui.jpg
+ ├── 02_inside_folder_1.jpg
+ ├── 02_inside_folder_2.jpg
+ ├── 03_working_output_1.mp4
+ └── 03_working_output_2.mp4
 ```
 
 ---
@@ -202,7 +202,7 @@ Supported operations include:
 * Previous Image
 * Exit Gallery
 
-This separation keeps the application modular while simplifying future feature additions such as slideshows or zoom functionality — new gallery behavior can be added without touching file browser code, and vice versa.
+This separation keeps the application modular while simplifying future feature additions such as slideshows or zoom functionality - new gallery behavior can be added without touching file browser code, and vice versa.
 
 ---
 
@@ -214,32 +214,32 @@ The graphics driver has been optimized using reusable buffers and a reduced numb
 >>> %Run -c $EDITOR_CONTENT
 
 MPY: soft reboot
-Init          : 84 ms
-Screen        : 41 ms
+Init : 84 ms
+Screen : 41 ms
 SD card mounted successfully!
-Title         : 40 ms
-Files         : 112 ms
-Footer        : 24 ms
-Total         : 710 ms
+Title : 40 ms
+Files : 112 ms
+Footer : 24 ms
+Total : 710 ms
 ```
 
 Breaking this down by stage:
 
-| Stage             | Time      | Notes                                             |
+| Stage | Time | Notes |
 | ----------------- | --------- | -------------------------------------------------- |
-| Init              | 84 ms     | Hardware and driver initialization                  |
-| Screen            | 41 ms     | Display controller setup and clear                 |
-| SD Mount          | —         | SD card detected and FAT filesystem mounted         |
-| Title             | 40 ms     | Header/title bar rendering                          |
-| Files             | 112 ms    | Directory read and file browser list rendering      |
-| Footer            | 24 ms     | Footer/status bar rendering                         |
-| **Total**         | **710 ms**| End-to-end boot to interactive file browser          |
+| Init | 84 ms | Hardware and driver initialization |
+| Screen | 41 ms | Display controller setup and clear |
+| SD Mount | - | SD card detected and FAT filesystem mounted |
+| Title | 40 ms | Header/title bar rendering |
+| Files | 112 ms | Directory read and file browser list rendering |
+| Footer | 24 ms | Footer/status bar rendering |
+| **Total** | **710 ms**| End-to-end boot to interactive file browser |
 
 Full-screen image loading has also been benchmarked separately:
 
-| Operation               | Time    |
+| Operation | Time |
 | ------------------------ | ------- |
-| Full Screen Image Load   | ~700 ms |
+| Full Screen Image Load | ~700 ms |
 
 For a **128 × 160 RGB565** display, both numbers represent efficient streaming performance directly from an SD card using MicroPython, with no intermediate full-frame buffer held in RAM. Together they indicate that the system reaches an interactive state in well under a second from soft reboot, and that navigating between images maintains a comparable, predictable load time.
 
@@ -275,7 +275,7 @@ For a **128 × 160 RGB565** display, both numbers represent efficient streaming 
 
 ### Hardware Setup
 
-![Hardware Setup — Raspberry Pi Pico wired to ST7735 TFT and SD card module](gallery/00_circuit.jpg)
+![Hardware Setup - Raspberry Pi Pico wired to ST7735 TFT and SD card module](gallery/00_circuit.jpg)
 
 *Wiring of the Raspberry Pi Pico, ST7735 TFT display, SD card module, and matrix keypad.*
 
@@ -291,9 +291,9 @@ For a **128 × 160 RGB565** display, both numbers represent efficient streaming 
 
 ### Gallery Navigation
 
-![Inside a folder — first view of image navigation](gallery/02_inside_folder_1.jpg)
+![Inside a folder - first view of image navigation](gallery/02_inside_folder_1.jpg)
 
-![Inside a folder — second view of image navigation](gallery/02_inside_folder_2.jpg)
+![Inside a folder - second view of image navigation](gallery/02_inside_folder_2.jpg)
 
 *Browsing image files inside a folder before launching the full-screen gallery.*
 
@@ -304,15 +304,15 @@ For a **128 × 160 RGB565** display, both numbers represent efficient streaming 
 **Working Demo 1**
 
 <video src="gallery/03_working_output_1.mp4" controls width="480">
-  Your viewer does not support embedded video. 
-  <a href="gallery/03_working_output_1.mp4">Download/view the video here</a>.
+ Your viewer does not support embedded video. 
+ <a href="gallery/03_working_output_1.mp4">Download/view the video here</a>.
 </video>
 
 **Working Demo 2**
 
 <video src="gallery/03_working_output_2.mp4" controls width="480">
-  Your viewer does not support embedded video.
-  <a href="gallery/03_working_output_2.mp4">Download/view the video here</a>.
+ Your viewer does not support embedded video.
+ <a href="gallery/03_working_output_2.mp4">Download/view the video here</a>.
 </video>
 
 > **Note:** Inline video playback depends on the Markdown renderer. GitHub's own README viewer does not autoplay embedded `<video>` tags from a repository, but the tags above render correctly on renderers that support HTML5 video (e.g. many static site generators, GitLab, and local Markdown previewers). If the video doesn't play inline, use the links above to open the files directly from `gallery/03_working_output_1.mp4` and `gallery/03_working_output_2.mp4`.
@@ -338,13 +338,3 @@ This project demonstrates practical, hands-on implementation of:
 
 >**Note**: If you landed directly on this section looking for a way to convert your own images into the .pimg format used by this gallery, the converter tool is available at:
 >Micro Py/08_TFT_PICO_Image_Processing/tools
-
-## Author
-
-**Rajsekhar Panda** 
-
----
-
-## License
-
-This project is licensed under the **MIT License**.
