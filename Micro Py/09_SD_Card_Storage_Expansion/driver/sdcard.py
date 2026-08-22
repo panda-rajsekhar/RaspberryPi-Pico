@@ -1,3 +1,42 @@
+"""
+This file is derived from the MicroPython SD card driver.
+
+Original source:
+https://github.com/micropython/micropython-lib/tree/master/micropython/drivers/storage/sdcard
+
+Copyright:
+MicroPython contributors
+
+License:
+MIT License
+
+This driver is used here as a third-party dependency for the
+SD-card storage experiment.
+
+
+
+MicroPython driver for SD cards using SPI bus.
+
+Requires an SPI bus and a CS pin.  Provides readblocks and writeblocks
+methods so the device can be mounted as a filesystem.
+
+Example usage on pyboard:
+
+    import pyb, sdcard, os
+    sd = sdcard.SDCard(pyb.SPI(1), pyb.Pin.board.X5)
+    pyb.mount(sd, '/sd2')
+    os.listdir('/')
+
+Example usage on ESP8266:
+
+    import machine, sdcard, os
+    sd = sdcard.SDCard(machine.SPI(1), machine.Pin(15))
+    os.mount(sd, '/sd')
+    os.listdir('/')
+
+"""
+
+    
 from micropython import const
 import time
 
