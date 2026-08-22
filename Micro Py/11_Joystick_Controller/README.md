@@ -6,8 +6,7 @@ The project reads the joystick's two analog axes and all seven buttons in real t
 
 ---
 
-## 📸 Project Gallery
-
+##  Project Gallery
 ### Hardware Setup
 
 The complete joystick shield and TFT setup connected to the Raspberry Pi Pico.
@@ -24,7 +23,7 @@ The TFT displays the joystick position, raw X/Y values, current direction, and t
 
 ---
 
-## 🎮 Button Detection
+##  Button Detection
 
 The controller supports all seven buttons available on the Funduino Joystick Shield:
 
@@ -52,7 +51,7 @@ The implementation supports multiple buttons being pressed simultaneously rather
 
 ---
 
-## 🕹️ Joystick Movement
+## 🕹 Joystick Movement
 
 The analog joystick is continuously sampled through the Pico's ADC inputs.
 
@@ -75,60 +74,60 @@ The display converts the raw ADC readings into a normalized **−100 to +100** r
 Supported direction states include:
 
 - `CENTER`
-    
+ 
 - `UP`
-    
+ 
 - `DOWN`
-    
+ 
 - `LEFT`
-    
+ 
 - `RIGHT`
-    
+ 
 - `UP-LEFT`
-    
+ 
 - `UP-RIGHT`
-    
+ 
 - `DOWN-LEFT`
-    
+ 
 - `DOWN-RIGHT`
-    
+ 
 
 ---
 
-# ✨ Features
+#  Features
 
 - Real-time joystick position monitoring
-    
+ 
 - Two-axis analog input using the Pico ADC
-    
+ 
 - Seven-button digital input
-    
+ 
 - Simultaneous multi-button detection
-    
+ 
 - 128×160 ST7735 SPI TFT interface
-    
+ 
 - Normalized joystick values from **−100 to +100**
-    
+ 
 - Automatic direction detection
-    
+ 
 - Configurable joystick deadzone
-    
+ 
 - Visual button state indication
-    
+ 
 - Flicker-free incremental rendering
-    
+ 
 - Dirty-rectangle display updates
-    
+ 
 - ~25 Hz control/display update loop
-    
+ 
 - No external pull-down resistors required for buttons
-    
+ 
 - Raspberry Pi Pico / Pico W compatible
-    
+ 
 
 ---
 
-# 🧩 Hardware
+#  Hardware
 
 |Component|Description|
 |---|---|
@@ -140,14 +139,14 @@ The project uses **SPI0**, two ADC channels, and seven GPIO inputs.
 
 ---
 
-# 🔌 Wiring
+#  Wiring
 
 ## TFT → Raspberry Pi Pico
 
 |TFT Pin|Pico Pin|GPIO|
 |---|--:|--:|
-|VCC|3V3(OUT)|—|
-|GND|GND|—|
+|VCC|3V3(OUT)|-|
+|GND|GND|-|
 |SCK|Physical Pin 24|GP18|
 |MOSI / SDA|Physical Pin 25|GP19|
 |CS|Physical Pin 22|GP17|
@@ -158,13 +157,13 @@ The default TFT configuration is:
 
 ```python
 ST7735(
-    spi_id=0,
-    baudrate=20_000_000,
-    sck=18,
-    mosi=19,
-    cs=17,
-    dc=21,
-    rst=20
+ spi_id=0,
+ baudrate=20_000_000,
+ sck=18,
+ mosi=19,
+ cs=17,
+ dc=21,
+ rst=20
 )
 ```
 
@@ -186,7 +185,7 @@ ST7735(
 |E|GP7|10|Button E|
 |F|GP8|11|Button F|
 
-> ⚠️ **Important:** Set the joystick shield's voltage switch to **3V** before connecting it to the Pico.
+> ⚠ **Important:** Set the joystick shield's voltage switch to **3V** before connecting it to the Pico.
 
 ### Wiring discrepancy
 
@@ -205,23 +204,23 @@ This README documents the **tested hardware configuration**, not the outdated co
 
 ---
 
-# 🖥️ Display Interface
+#  Display Interface
 
 The 128×160 TFT is divided into two main panels.
 
 ```text
 ┌────────────────────────────┐
-│      JOYSTICK SHIELD       │
+│ JOYSTICK SHIELD │
 │ ┌─ JOYSTICK ──────────────┐│
-│ │      ┌────────┐         ││
-│ │      │    ●   │         ││
-│ │      └────────┘         ││
-│ │       X:   2 Y:   3    ││
-│ │          CENTER        ││
+│ │ ┌────────┐ ││
+│ │ │ ● │ ││
+│ │ └────────┘ ││
+│ │ X: 2 Y: 3 ││
+│ │ CENTER ││
 │ └─────────────────────────┘│
 │ ┌─ BUTTONS ───────────────┐│
-│ │  [A][B][C][D]           ││
-│ │   [E][F][K]             ││
+│ │ [A][B][C][D] ││
+│ │ [E][F][K] ││
 │ └─────────────────────────┘│
 └────────────────────────────┘
 ```
@@ -231,24 +230,24 @@ The 128×160 TFT is divided into two main panels.
 The upper panel contains:
 
 - Joystick travel box
-    
+ 
 - Center crosshair
-    
+ 
 - Live joystick position
-    
+ 
 - X-axis value
-    
+ 
 - Y-axis value
-    
+ 
 - Direction indicator
-    
+ 
 
 The position dot is:
 
 - **Yellow** when the joystick is centered
-    
+ 
 - **Cyan** when the joystick is displaced
-    
+ 
 
 ---
 
@@ -273,7 +272,7 @@ Because every button is sampled independently, multiple buttons can be pressed s
 
 ---
 
-# ⚙️ How It Works
+#  How It Works
 
 ## 1. ADC Sampling
 
@@ -293,8 +292,8 @@ using:
 
 ```python
 def read_axis(adc):
-    raw = adc.read_u16()
-    return round((raw - 32768) / 32768 * 100)
+ raw = adc.read_u16()
+ return round((raw - 32768) / 32768 * 100)
 ```
 
 The joystick axes are then inverted at the input stage to match the physical movement of the shield:
@@ -308,7 +307,7 @@ This keeps the numerical values, graphical dot movement, and direction detection
 
 ---
 
-# 🎯 Direction Detection
+#  Direction Detection
 
 A configurable deadzone prevents small ADC fluctuations around the center position from producing false movement.
 
@@ -323,8 +322,8 @@ For example:
 ```text
 X > deadzone
 Y > deadzone
-        ↓
-    UP-RIGHT
+ ↓
+ UP-RIGHT
 ```
 
 while:
@@ -332,8 +331,8 @@ while:
 ```text
 |X| ≤ deadzone
 |Y| ≤ deadzone
-        ↓
-     CENTER
+ ↓
+ CENTER
 ```
 
 This also allows diagonal directions such as:
@@ -347,7 +346,7 @@ DOWN-RIGHT
 
 ---
 
-# 🚀 Dirty-Rectangle Rendering
+#  Dirty-Rectangle Rendering
 
 One of the main technical features of this project is the use of **incremental display updates**.
 
@@ -360,54 +359,54 @@ Instead, the project divides rendering into:
 Drawn once during startup:
 
 - Panel borders
-    
+ 
 - Panel titles
-    
+ 
 - Crosshair
-    
+ 
 - Button outlines
-    
+ 
 
 ### Dynamic UI
 
 Only updated when something changes:
 
 - Joystick position dot
-    
+ 
 - X/Y values
-    
+ 
 - Direction text
-    
+ 
 - Button states
-    
+ 
 
 For example, the joystick dot is updated using a small rectangle:
 
 ```python
 def redraw_dot(cx, cy, color):
-    tft.fill_rectangle(
-        cx - DOT_R,
-        cy - DOT_R,
-        DOT_R * 2 + 1,
-        DOT_R * 2 + 1,
-        color
-    )
+ tft.fill_rectangle(
+ cx - DOT_R,
+ cy - DOT_R,
+ DOT_R * 2 + 1,
+ DOT_R * 2 + 1,
+ color
+ )
 ```
 
 Instead of repainting the complete joystick panel, the program:
 
 1. Erases the old dot
-    
+ 
 2. Draws the new dot
-    
+ 
 3. Leaves everything else untouched
-    
+ 
 
 This dramatically reduces unnecessary SPI transfers.
 
 ---
 
-# 🧠 State Tracking
+#  State Tracking
 
 The program keeps track of the previous display state:
 
@@ -425,17 +424,17 @@ For example, holding Button A does not continuously redraw the A button. The dis
 The same principle is used for:
 
 - Joystick position
-    
+ 
 - X/Y values
-    
+ 
 - Direction text
-    
+ 
 - Button states
-    
+ 
 
 ---
 
-# 📁 Project Structure
+#  Project Structure
 
 The current repository structure is intentionally simple:
 
@@ -445,23 +444,23 @@ The current repository structure is intentionally simple:
 ├── main.py
 │
 └── assets/
-    ├── 00_Ckt.jpg
-    ├── 01_homescreen.jpg
-    ├── 03_Double_Button_Press.jpg
-    ├── 03_four_press.jpg
-    ├── 03_Single_Button_Press.jpg
-    ├── 03_Triple_Button_Press.jpg
-    ├── 04_joystick_movement_1.jpg
-    ├── 04_joystick_movement_2.jpg
-    ├── 04_joystick_movement_3.jpg
-    └── 04_joystick_movement_4.jpg
+ ├── 00_Ckt.jpg
+ ├── 01_homescreen.jpg
+ ├── 03_Double_Button_Press.jpg
+ ├── 03_four_press.jpg
+ ├── 03_Single_Button_Press.jpg
+ ├── 03_Triple_Button_Press.jpg
+ ├── 04_joystick_movement_1.jpg
+ ├── 04_joystick_movement_2.jpg
+ ├── 04_joystick_movement_3.jpg
+ └── 04_joystick_movement_4.jpg
 ```
 
 The `assets` directory contains the project documentation photographs used throughout this README.
 
 ---
 
-# 📦 Required Pico Files
+#  Required Pico Files
 
 The complete runtime environment requires the following files:
 
@@ -478,43 +477,43 @@ I am not going to upload the same files again in different projects, I don't thi
 
 ---
 
-# 🔄 Main Program Flow
+#  Main Program Flow
 
 The main loop follows this basic sequence:
 
 ```text
-                 ┌──────────────┐
-                 │ Initialize   │
-                 │ TFT + GPIO   │
-                 └──────┬───────┘
-                        ↓
-                ┌───────────────┐
-                │ Draw Static UI │
-                └───────┬───────┘
-                        ↓
-              ┌────────────────────┐
-              │ Read Joystick ADC  │
-              │ Read 7 Buttons     │
-              └─────────┬──────────┘
-                        ↓
-              ┌────────────────────┐
-              │ Calculate Direction│
-              │ Calculate Position │
-              └─────────┬──────────┘
-                        ↓
-              ┌────────────────────┐
-              │ Compare With       │
-              │ Previous State     │
-              └─────────┬──────────┘
-                        ↓
-              ┌────────────────────┐
-              │ Update Only Changed│
-              │ Display Regions    │
-              └─────────┬──────────┘
-                        ↓
-                    40 ms delay
-                        │
-                        └───────────→ repeat
+ ┌──────────────┐
+ │ Initialize │
+ │ TFT + GPIO │
+ └──────┬───────┘
+ ↓
+ ┌───────────────┐
+ │ Draw Static UI │
+ └───────┬───────┘
+ ↓
+ ┌────────────────────┐
+ │ Read Joystick ADC │
+ │ Read 7 Buttons │
+ └─────────┬──────────┘
+ ↓
+ ┌────────────────────┐
+ │ Calculate Direction│
+ │ Calculate Position │
+ └─────────┬──────────┘
+ ↓
+ ┌────────────────────┐
+ │ Compare With │
+ │ Previous State │
+ └─────────┬──────────┘
+ ↓
+ ┌────────────────────┐
+ │ Update Only Changed│
+ │ Display Regions │
+ └─────────┬──────────┘
+ ↓
+ 40 ms delay
+ │
+ └───────────→ repeat
 ```
 
 The loop runs approximately **25 times per second**:
@@ -527,7 +526,7 @@ This provides responsive joystick monitoring without unnecessarily consuming the
 
 ---
 
-# 🛠️ Customization
+#  Customization
 
 Several parameters can be changed directly in `main.py`.
 
@@ -592,7 +591,7 @@ would increase the update frequency to approximately 50 Hz.
 
 ---
 
-# ⚠️ Known Driver Quirk
+# ⚠ Known Driver Quirk
 
 `widgets_dev.py` contains a `draw_status_led()` widget that calls:
 
@@ -616,67 +615,67 @@ If the widget is required in a future project, a `fill_circle()` implementation 
 
 ---
 
-# 📌 Current Status
+#  Current Status
 
-**Status: ✅ Working**
+**Status:  Working**
 
 The project has successfully achieved:
 
-- ✅ Raspberry Pi Pico joystick input
-    
-- ✅ Analog X/Y movement detection
-    
-- ✅ Direction detection
-    
-- ✅ 7-button detection
-    
-- ✅ Simultaneous button presses
-    
-- ✅ ST7735 TFT output
-    
-- ✅ Live joystick visualization
-    
-- ✅ Live button visualization
-    
-- ✅ Deadzone filtering
-    
-- ✅ Dirty-rectangle rendering
-    
-- ✅ Flicker-free UI
-    
-- ✅ Tested physical wiring
-    
-- ✅ Hardware documentation photographs
-    
+-  Raspberry Pi Pico joystick input
+ 
+-  Analog X/Y movement detection
+ 
+-  Direction detection
+ 
+-  7-button detection
+ 
+-  Simultaneous button presses
+ 
+-  ST7735 TFT output
+ 
+-  Live joystick visualization
+ 
+-  Live button visualization
+ 
+-  Deadzone filtering
+ 
+-  Dirty-rectangle rendering
+ 
+-  Flicker-free UI
+ 
+-  Tested physical wiring
+ 
+-  Hardware documentation photographs
+ 
 
 ---
 
-## 🔭 Possible Future Improvements
+##  Possible Future Improvements
 
 Potential extensions for the controller include:
 
 - Joystick calibration screen
-    
+ 
 - Configurable deadzone from the TFT
-    
+ 
 - Button event logging
-    
+ 
 - Game-controller HID functionality
-    
+ 
 - USB HID joystick implementation
-    
+ 
 - Input latency measurement
-    
+ 
 - ADC filtering / smoothing
-    
+ 
 - Configurable UI themes
-    
+ 
 - Menu-driven controller diagnostics
-    
+ 
 - FPS / update-rate indicator
-    
+ 
 - Joystick-to-game control mapping
-    
+ 
 
 ---
 
