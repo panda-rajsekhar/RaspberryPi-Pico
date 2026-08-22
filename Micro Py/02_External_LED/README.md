@@ -49,7 +49,7 @@ Each LED is connected through its own **330 Ω current-limiting resistor**, whil
 
 ---
 
-# Pattern 1 — Running LED
+# Pattern 1 - Running LED
 
 ## Description
 
@@ -80,7 +80,7 @@ One LED lights up at a time from **LED 1 → LED 2 → LED 3 → LED 4**, creati
 
 ---
 
-# Pattern 2 — Ping Pong
+# Pattern 2 - Ping Pong
 
 ## Description
 
@@ -90,7 +90,7 @@ The LEDs move from left to right and then reverse direction, creating a bouncing
 
 ```text
 ① → ② → ③ → ④
-              ↓
+ ↓
 ① ← ② ← ③ ← ④
 ```
 
@@ -106,7 +106,7 @@ The LEDs move from left to right and then reverse direction, creating a bouncing
 
 ---
 
-# Pattern 3 — Fill and Empty
+# Pattern 3 - Fill and Empty
 
 ## Description
 
@@ -148,7 +148,7 @@ The LEDs gradually turn ON one by one until all LEDs are illuminated. They then 
 
 ---
 
-# Pattern 4 — Alternate Pair
+# Pattern 4 - Alternate Pair
 
 ## Description
 
@@ -159,13 +159,13 @@ Two alternate LEDs blink together while the other two remain OFF. The pattern th
 ```text
 State 1
 
-①   ③
+① ③
 
 ↓
 
 State 2
 
-②   ④
+② ④
 
 ↓
 
@@ -222,16 +222,6 @@ Repeat
 - Random LED Animations
 - Knight Rider (Larson Scanner)
 - Morse Code Transmitter
-
----
-
-# Author
-
-**Rajsekhar Panda**
-
-Bachelor of Technology (Electronics & Communication Engineering)
-
-Jawaharlal Nehru Government Engineering College, Sundernagar
 
 ---
 
