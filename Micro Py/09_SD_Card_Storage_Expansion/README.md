@@ -92,6 +92,19 @@ This experiment demonstrates how to:
 
 ---
 
+## Third-Party Software
+
+This experiment includes the `sdcard.py` driver from the
+[MicroPython `micropython-lib` project](https://github.com/micropython/micropython-lib).
+
+The SD card driver is **not an original implementation of this repository**.
+It is included for convenience and is used under its original MIT License.
+
+The original copyright and license notices are retained in the driver source.
+
+
+---
+
 ## Hardware Connections
 
 The TFT display and SD card share the **SPI0** peripheral of the Raspberry Pi Pico. Only the Chip Select pins differ.
@@ -482,10 +495,7 @@ This repository documents practical embedded systems development using the Raspb
 ---
 
 ## License
-
-This project is licensed under the **MIT License**, which permits anyone to use, modify, distribute, and sublicense the software with minimal restrictions, provided that the original copyright notice and license are included.
-
-See the [LICENSE](LICENSE) file for the complete license text.
+Project License: The original code developed for this repository is licensed under the MIT License. Third-party components retain their respective original licenses.
 
 ---
 
