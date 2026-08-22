@@ -1,4 +1,4 @@
-# 05 — 16×2 I2C LCD Interface with Raspberry Pi Pico
+# 05 - 16×2 I2C LCD Interface with Raspberry Pi Pico
 
 **Author:** Rajsekhar Panda
 **Series:** Raspberry Pi Pico Embedded Systems Learning Series
@@ -113,9 +113,9 @@ Using **Thonny IDE**:
 2. Click **File → Save As...**
 3. Select **Raspberry Pi Pico** as the destination.
 4. Save the file with the same name:
-   ```
-   lcd_api.py
-   ```
+ ```
+ lcd_api.py
+ ```
 5. Repeat the same process for **`i2c_lcd.py`**.
 
 After uploading, the Pico's file system should look similar to:
@@ -145,7 +145,7 @@ Since **`i2c_lcd.py`** internally imports **`lcd_api.py`**, **both files must al
 
 ---
 
-### ⚠️ Common Errors
+### ⚠ Common Errors
 
 If either driver file is missing, MicroPython may display an error such as:
 
@@ -174,11 +174,11 @@ Simply upload the missing file(s) to the Pico and rerun the experiment.
 ```
 05_16X2_I2C_LCD/
 │
-├── assets/                      # Reference images/photos for each experiment
+├── assets/ # Reference images/photos for each experiment
 │
 lcd/
-├── lcd_api.py      # Base LCD API (required)
-└── i2c_lcd.py      # I2C Driver (depends on lcd_api.py)
+├── lcd_api.py # Base LCD API (required)
+└── i2c_lcd.py # I2C Driver (depends on lcd_api.py)
 │
 ├── 01_I2C_Scan
 ├── 02_hello
@@ -187,7 +187,7 @@ lcd/
 ├── 05_scroll
 ├── 06_display_demo
 ├── 07_custom_characters
-├── Read_i2c.md                   # I^2C Manual 
+├── Read_i2c.md # I^2C Manual 
 └── README.md
 ```
 
@@ -195,7 +195,7 @@ lcd/
 
 ## LCD Driver Architecture
 
-The LCD software is organized into two layers, so that the communication method (I2C here) can be swapped out later — e.g., for a parallel HD44780 driver — without changing any application code.
+The LCD software is organized into two layers, so that the communication method (I2C here) can be swapped out later - e.g., for a parallel HD44780 driver - without changing any application code.
 
 ### 1. LCD API Layer
 
@@ -227,17 +227,17 @@ Responsible for:
 
 ```
 User Program
-     |
-     v
-LCD API            (lcd_api.py)
-     |
-     v
-I2C LCD Driver      (i2c_lcd.py)
-     |
-     v
+ |
+ v
+LCD API (lcd_api.py)
+ |
+ v
+I2C LCD Driver (i2c_lcd.py)
+ |
+ v
 I2C Bus
-     |
-     v
+ |
+ v
 LCD Hardware (via PCF8574 backpack)
 ```
 
@@ -246,7 +246,7 @@ LCD Hardware (via PCF8574 backpack)
 
 ## Experiments
 
-### Experiment 01 — I2C Device Scanner
+### Experiment 01 - I2C Device Scanner
 
 **Folder:** `01_I2C_Scan`
 
@@ -268,7 +268,7 @@ I2C devices found:
 
 ---
 
-### Experiment 02 — Hello World Display
+### Experiment 02 - Hello World Display
 
 **Folder:** `02_hello`
 
@@ -290,7 +290,7 @@ Hello World
 
 ---
 
-### Experiment 03 — Cursor Positioning
+### Experiment 03 - Cursor Positioning
 
 **Folder:** `03_cursor_positioning`
 
@@ -309,7 +309,7 @@ lcd.putstr("Your String")
 
 ---
 
-### Experiment 04 — Clear and Home Commands
+### Experiment 04 - Clear and Home Commands
 
 **Folder:** `04_clear_home`
 
@@ -327,7 +327,7 @@ lcd.putstr("Your String")
 
 ---
 
-### Experiment 05 — Scrolling Text
+### Experiment 05 - Scrolling Text
 
 **Folder:** `05_scroll`
 
@@ -343,7 +343,7 @@ lcd.putstr("Your String")
 
 ---
 
-### Experiment 06 — LCD Display Demo
+### Experiment 06 - LCD Display Demo
 
 **Folder:** `06_display_demo`
 
@@ -360,7 +360,7 @@ lcd.putstr("Your String")
 
 ---
 
-### Experiment 07 — Custom Characters
+### Experiment 07 - Custom Characters
 
 **Folder:** `07_custom_characters`
 
