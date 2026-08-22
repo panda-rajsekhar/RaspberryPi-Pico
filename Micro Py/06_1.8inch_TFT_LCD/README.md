@@ -22,14 +22,14 @@ The project uses the Raspberry Pi Pico hardware SPI interface to communicate wit
 
 | Raspberry Pi Pico | ST7735 TFT LCD | Description |
 |:-----------------:|:--------------:|-------------|
-| 3V3              | VCC            | Power Supply |
-| GND              | GND            | Ground |
-| GP18             | SCK / CLK      | SPI Clock |
-| GP19             | SDA / MOSI     | SPI Data |
-| GP20             | DC             | Data / Command |
-| GP21             | RST            | Display Reset |
-| GP22             | CS             | Chip Select |
-| 3V3              | BL / LED       | Backlight |
+| 3V3 | VCC | Power Supply |
+| GND | GND | Ground |
+| GP18 | SCK / CLK | SPI Clock |
+| GP19 | SDA / MOSI | SPI Data |
+| GP20 | DC | Data / Command |
+| GP21 | RST | Display Reset |
+| GP22 | CS | Chip Select |
+| 3V3 | BL / LED | Backlight |
 
 > **Note**
 >
@@ -89,20 +89,20 @@ Every operation performed on the display follows the same basic sequence.
 
 1. The Pico pulls **CS LOW** to select the display.
 2. The **DC** pin is configured.
-   - LOW → Command
-   - HIGH → Display Data
+ - LOW → Command
+ - HIGH → Display Data
 3. The Pico generates clock pulses on **SCK**.
 4. Data bytes are transmitted through **MOSI**.
 5. Once the transmission is complete, **CS** returns HIGH.
 
 ```
-Raspberry Pi Pico                     ST7735 TFT
+Raspberry Pi Pico ST7735 TFT
 
-CS   ───────────────┐___________________________┐────
+CS ───────────────┐___________________________┐────
 
-DC   ──────CMD──────┐────────DATA───────────────┐────
+DC ──────CMD──────┐────────DATA───────────────┐────
 
-SCK  ──┐┌─┐┌─┐┌─┐┌─┐┌─┐┌─┐┌─┐┌─┐┌─┐┌─┐┌─┐─────────
+SCK ──┐┌─┐┌─┐┌─┐┌─┐┌─┐┌─┐┌─┐┌─┐┌─┐┌─┐┌─┐─────────
 
 MOSI ──<------ Command ------><------ Data ----->
 ```
@@ -143,26 +143,26 @@ For these reasons, this project exclusively uses the RP2040's **hardware SPI int
 ## SPI in This Project
 
 ```
-Raspberry Pi Pico                ST7735 TFT
+Raspberry Pi Pico ST7735 TFT
 
-GP18 (SCK)   ───────────────► CLK
+GP18 (SCK) ───────────────► CLK
 
-GP19 (MOSI)  ───────────────► SDA
+GP19 (MOSI) ───────────────► SDA
 
-GP22 (CS)    ───────────────► CS
+GP22 (CS) ───────────────► CS
 
-GP20 (DC)    ───────────────► DC
+GP20 (DC) ───────────────► DC
 
-GP21 (RST)   ───────────────► RESET
+GP21 (RST) ───────────────► RESET
 
-3V3          ───────────────► VCC
+3V3 ───────────────► VCC
 
-GND          ───────────────► GND
+GND ───────────────► GND
 
-3V3          ───────────────► BL
+3V3 ───────────────► BL
 ```
 
-Every graphics primitive implemented in this repository—whether drawing a single pixel, rendering text, or displaying complex UI widgets—is ultimately converted into SPI data packets and transmitted over this interface to the ST7735 display controller.
+Every graphics primitive implemented in this repository-whether drawing a single pixel, rendering text, or displaying complex UI widgets-is ultimately converted into SPI data packets and transmitted over this interface to the ST7735 display controller.
 
 
 ---
@@ -228,7 +228,7 @@ The following gallery showcases the complete development journey of the ST7735 T
 ## Hardware
 
 <p align="center">
-  <img src="assets/00_circuit.jpg" width="700">
+ <img src="assets/00_circuit.jpg" width="700">
 </p>
 
 ---
@@ -236,7 +236,7 @@ The following gallery showcases the complete development journey of the ST7735 T
 ## Display Initialization
 
 <p align="center">
-  <img src="assets/01_01_SPI_Test.jpg" width="260">
+ <img src="assets/01_01_SPI_Test.jpg" width="260">
 </p>
 
 ---
@@ -244,30 +244,30 @@ The following gallery showcases the complete development journey of the ST7735 T
 ## Graphics Primitives
 
 <p align="center">
-  <img src="assets/04_Draw_Pixel.jpg" width="180">
-  <img src="assets/05_Corner_Test.jpg" width="180">
-  <img src="assets/06_Crosshair_Test.jpg" width="180">
-  <img src="assets/07_Lines_Test.jpg" width="180">
+ <img src="assets/04_Draw_Pixel.jpg" width="180">
+ <img src="assets/05_Corner_Test.jpg" width="180">
+ <img src="assets/06_Crosshair_Test.jpg" width="180">
+ <img src="assets/07_Lines_Test.jpg" width="180">
 </p>
 
 <p align="center">
-  <img src="assets/09_Rectangles_Test.jpg" width="180">
-  <img src="assets/11_Multiple_Filled_Rectangles.jpg" width="180">
-  <img src="assets/12_Circle_Test.jpg" width="180">
-  <img src="assets/13_Olympic_Rings.jpg" width="180">
+ <img src="assets/09_Rectangles_Test.jpg" width="180">
+ <img src="assets/11_Multiple_Filled_Rectangles.jpg" width="180">
+ <img src="assets/12_Circle_Test.jpg" width="180">
+ <img src="assets/13_Olympic_Rings.jpg" width="180">
 </p>
 
 <p align="center">
-  <img src="assets/14_Multiple_Filled_Circles.jpg" width="180">
-  <img src="assets/15_Traffic_Signal.jpg" width="180">
-  <img src="assets/16_Triangles_Test.jpg" width="180">
-  <img src="assets/17_Sierpinski_Style_Pattern.jpg" width="180">
+ <img src="assets/14_Multiple_Filled_Circles.jpg" width="180">
+ <img src="assets/15_Traffic_Signal.jpg" width="180">
+ <img src="assets/16_Triangles_Test.jpg" width="180">
+ <img src="assets/17_Sierpinski_Style_Pattern.jpg" width="180">
 </p>
 
 <p align="center">
-  <img src="assets/18_Filled_Triangles_Tessellation.jpg" width="180">
-  <img src="assets/19_Christmas_Tree.jpg" width="180">
-  <img src="assets/24_Text_Scaling.jpg" width="180">
+ <img src="assets/18_Filled_Triangles_Tessellation.jpg" width="180">
+ <img src="assets/19_Christmas_Tree.jpg" width="180">
+ <img src="assets/24_Text_Scaling.jpg" width="180">
 </p>
 
 ---
@@ -275,16 +275,16 @@ The following gallery showcases the complete development journey of the ST7735 T
 ## Embedded UI Widgets
 
 <p align="center">
-  <img src="assets/27_Draw_Panel.jpg" width="180">
-  <img src="assets/28_Draw_Status_LED.jpg" width="180">
-  <img src="assets/29_Draw_Graph.jpg" width="180">
-  <img src="assets/30_Diamonds_Test.jpg" width="180">
+ <img src="assets/27_Draw_Panel.jpg" width="180">
+ <img src="assets/28_Draw_Status_LED.jpg" width="180">
+ <img src="assets/29_Draw_Graph.jpg" width="180">
+ <img src="assets/30_Diamonds_Test.jpg" width="180">
 </p>
 
 <p align="center">
-  <img src="assets/31_Meter_Test.jpg" width="180">
-  <img src="assets/32_Button_Test.jpg" width="180">
-  <img src="assets/33_Battery_Test.jpg" width="180">
+ <img src="assets/31_Meter_Test.jpg" width="180">
+ <img src="assets/32_Button_Test.jpg" width="180">
+ <img src="assets/33_Battery_Test.jpg" width="180">
 </p>
 
 ---
@@ -326,7 +326,7 @@ This project is available as a separate repository within the Raspberry Pi Pico 
 
 ---
 
-### Next Step — Image Rendering
+### Next Step - Image Rendering
 
 The next stage of development focuses on bringing images to the ST7735 TFT LCD.
 
