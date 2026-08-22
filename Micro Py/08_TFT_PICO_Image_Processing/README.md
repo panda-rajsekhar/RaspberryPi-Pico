@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="assets/01_v1_output.jpg" width="380">
+ <img src="assets/01_v1_output.jpg" width="380">
 </p>
 
 <h1 align="center">
@@ -104,13 +104,13 @@ pip install pillow
 
 │
 ├── assets/
-│   ├── 01_v1_output.jpg
-|   ├── file_upload.png
-│   ├── logo.png
-│   └── logo.pimg
+│ ├── 01_v1_output.jpg
+| ├── file_upload.png
+│ ├── logo.png
+│ └── logo.pimg
 │
 ├── tools/
-│   └── image_converter.py
+│ └── image_converter.py
 │
 ├── image.py
 ├── test.py
@@ -151,20 +151,20 @@ RGB565
 
 ```
 PNG / JPG
-      │
-      ▼
+ │
+ ▼
 image_converter.py
-      │
-      ▼
+ │
+ ▼
 Convert to RGB
-      │
-      ▼
+ │
+ ▼
 Resize Image
-      │
-      ▼
+ │
+ ▼
 RGB565 Encoding
-      │
-      ▼
+ │
+ ▼
 Generate PIMG
 ```
 
@@ -182,26 +182,26 @@ The converter automatically
 
 ```
 PIMG File
-      │
-      ▼
+ │
+ ▼
 Open Image
-      │
-      ▼
+ │
+ ▼
 Read Header
-      │
-      ▼
+ │
+ ▼
 Validate Format
-      │
-      ▼
+ │
+ ▼
 Set TFT Window
-      │
-      ▼
+ │
+ ▼
 Read Image Chunk
-      │
-      ▼
+ │
+ ▼
 SPI Write
-      │
-      ▼
+ │
+ ▼
 Repeat
 ```
 
@@ -223,7 +223,7 @@ After converting an image into the **PIMG** format, upload the generated `.pimg`
 6. Drag and drop the file onto the **Raspberry Pi Pico** file system, or right-click the file and select **Upload to /**.
 
 <p align="center">
-    <img src="assets/file_upload.png">
+ <img src="assets/file_upload.png">
 </p>
 
 
@@ -234,8 +234,8 @@ This Computer
 
 logo.pimg
 
-        │
-        ▼
+ │
+ ▼
 
 Raspberry Pi Pico
 
@@ -257,10 +257,10 @@ Images may also be organized into folders.
 ├── image.py
 ├── test.py
 └── assets/
-    ├── logo.pimg
-    ├── cpu.pimg
-    ├── wifi.pimg
-    └── ram.pimg
+ ├── logo.pimg
+ ├── cpu.pimg
+ ├── wifi.pimg
+ └── ram.pimg
 ```
 
 Example
@@ -332,8 +332,8 @@ Output
 --------------------------------
 PIMG Image Information
 --------------------------------
-File   : logo.pimg
-Width  : 128
+File : logo.pimg
+Width : 128
 Height : 160
 Format : RGB565
 --------------------------------
@@ -417,7 +417,4 @@ GitHub
 https://github.com/panda-rajsekhar
 
 ---
-
-# Jai Jagannath 🙏
-
-Built with ❤️ using Raspberry Pi Pico, MicroPython, and the ST7735 TFT LCD.
+<!--- # Jai Jagannath 🙏 Built with ❤ using Raspberry Pi Pico, MicroPython, and the ST7735 TFT LCD. ---->
