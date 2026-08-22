@@ -1,4 +1,4 @@
-# 09 – SD Card Storage Expansion for Raspberry Pi Pico
+# 09 - SD Card Storage Expansion for Raspberry Pi Pico
 
 Extending the Raspberry Pi Pico graphics framework with external SD storage over SPI.
 
@@ -7,13 +7,13 @@ Extending the Raspberry Pi Pico graphics framework with external SD storage over
 ## Preview
 
 <p align="center">
-  <img src="assets/00_sd_cardslot.jpg" width="500"><br>
-  <b>ST7735 TFT module with integrated SD card slot</b>
+ <img src="assets/00_sd_cardslot.jpg" width="500"><br>
+ <b>ST7735 TFT module with integrated SD card slot</b>
 </p>
 
 <p align="center">
-  <img src="assets/02_output.jpg" width="500"><br>
-  <b>PIMG image rendered directly from the SD card</b>
+ <img src="assets/02_output.jpg" width="500"><br>
+ <b>PIMG image rendered directly from the SD card</b>
 </p>
 
 ---
@@ -70,25 +70,25 @@ This experiment demonstrates how to:
 ├── unmount_sd.py
 │
 ├── assets
-│   ├── 00_sd_cardslot.jpg
-│   ├── 01_circuit_wiring.jpg
-│   └── 02_output.jpg
+│ ├── 00_sd_cardslot.jpg
+│ ├── 01_circuit_wiring.jpg
+│ └── 02_output.jpg
 │
 └── driver
-    └── sdcard.py
+ └── sdcard.py
 ```
 
 ---
 
 ## Hardware Required
 
-| Component                                  | Quantity    |
+| Component | Quantity |
 |--------------------------------------------|-------------|
-| Raspberry Pi Pico                          | 1           |
-| ST7735 TFT Display (with SD slot)          | 1           |
-| SD Card (FAT/FAT32)                        | 1           |
-| Jumper Wires                               | As required |
-| USB Cable                                  | 1           |
+| Raspberry Pi Pico | 1 |
+| ST7735 TFT Display (with SD slot) | 1 |
+| SD Card (FAT/FAT32) | 1 |
+| Jumper Wires | As required |
+| USB Cable | 1 |
 
 ---
 
@@ -110,55 +110,55 @@ The original copyright and license notices are retained in the driver source.
 The TFT display and SD card share the **SPI0** peripheral of the Raspberry Pi Pico. Only the Chip Select pins differ.
 
 ```
-                SPI0 BUS
+ SPI0 BUS
 
-          +-------------------+
-          | Raspberry Pi Pico |
-          +-------------------+
-             │      │      │
-          SCK│   MOSI│   MISO
-             │      │      │
-      ┌──────┘      │      └────────┐
-      │             │               │
-      ▼             ▼               ▼
+ +-------------------+
+ | Raspberry Pi Pico |
+ +-------------------+
+ │ │ │
+ SCK│ MOSI│ MISO
+ │ │ │
+ ┌──────┘ │ └────────┐
+ │ │ │
+ ▼ ▼ ▼
 
-  ST7735 TFT                    SD Card
-   CS = GP17                     CS = GP5
+ ST7735 TFT SD Card
+ CS = GP17 CS = GP5
 ```
 
 ### TFT Connections
 
 | Raspberry Pi Pico | TFT Display |
 |--------------------|-------------|
-| GP18               | SCK         |
-| GP19               | MOSI        |
-| GP21               | DC          |
-| GP20               | RESET       |
-| GP17               | TFT_CS      |
-| 3V3                | VCC         |
-| 3V3                | LED         |
-| GND                | GND         |
+| GP18 | SCK |
+| GP19 | MOSI |
+| GP21 | DC |
+| GP20 | RESET |
+| GP17 | TFT_CS |
+| 3V3 | VCC |
+| 3V3 | LED |
+| GND | GND |
 
 ### SD Connections
 
 | Raspberry Pi Pico | SD |
 |--------------------|---------|
-| GP18               | SCK     |
-| GP19               | MOSI    |
-| GP16               | MISO    |
-| GP5                | CS      |
-| 3V3                | VCC     |
-| GND                | GND     |
+| GP18 | SCK |
+| GP19 | MOSI |
+| GP16 | MISO |
+| GP5 | CS |
+| 3V3 | VCC |
+| GND | GND |
 
 ### Circuit Wiring
 
 <p align="center">
-  <img src="assets/01_circuit_wiring.jpg" width="700">
+ <img src="assets/01_circuit_wiring.jpg" width="700">
 </p>
 
 ---
 
-## Step 1 — Verifying SD Card Communication
+## Step 1 - Verifying SD Card Communication
 
 Before mounting the filesystem, the SPI interface should be tested.
 
@@ -171,7 +171,7 @@ The script `sd_verification.py` initializes the SD card, verifies communication,
 SD Card Status
 --------------------------------
 Status : Mounted
-Mount  : /sd
+Mount : /sd
 --------------------------------
 Contents
  - System Volume Information
@@ -190,7 +190,7 @@ Successful execution confirms:
 
 ---
 
-## Step 2 — Mounting the Filesystem
+## Step 2 - Mounting the Filesystem
 
 The script `mount_sd.py` mounts the SD card to `/sd`.
 
@@ -202,14 +202,14 @@ import os
 os.listdir("/sd")
 
 with open("/sd/file.txt") as f:
-    print(f.read())
+ print(f.read())
 ```
 
 Every graphical asset stored on the SD card can now be accessed through standard MicroPython file operations.
 
 ---
 
-## Step 3 — Unmounting the Filesystem
+## Step 3 - Unmounting the Filesystem
 
 Before removing the SD card, the filesystem should always be unmounted:
 
@@ -230,14 +230,14 @@ Unmounting ensures:
 
 ---
 
-## Step 4 — Moving Image Assets
+## Step 4 - Moving Image Assets
 
 Initially, images reside inside the Pico's internal flash memory.
 
 ```
 Internal Flash
-      │
-      ▼
+ │
+ ▼
  test.pimg
 ```
 
@@ -245,14 +245,14 @@ The script `move.py` copies the file to the SD card.
 
 ```
 Internal Flash
-      │
-      ▼
+ │
+ ▼
  test.pimg
-      │
-      ▼
-  SD Card
-      │
-      ▼
+ │
+ ▼
+ SD Card
+ │
+ ▼
  /sd/test.pimg
 ```
 
@@ -260,7 +260,7 @@ After verifying the copy, the original file may optionally be removed to recover
 
 ---
 
-## Step 5 — Rendering Images from the SD Card
+## Step 5 - Rendering Images from the SD Card
 
 One of the biggest advantages of the PIMG engine is that no changes are required.
 
@@ -293,7 +293,7 @@ This provides:
 The image below shows successful rendering of a PIMG image directly from the SD card.
 
 <p align="center">
-  <img src="assets/02_output.jpg" width="500">
+ <img src="assets/02_output.jpg" width="500">
 </p>
 
 ---
@@ -302,13 +302,13 @@ The image below shows successful rendering of a PIMG image directly from the SD 
 
 Compared to storing graphical assets in internal flash memory, external storage offers significant benefits.
 
-| Internal Flash           | SD Card                         |
+| Internal Flash | SD Card |
 |--------------------------|--------------------------------|
-| Limited capacity          | Expandable storage            |
-| Difficult to update       | Easy asset replacement        |
-| Small image library       | Virtually unlimited resources |
-| Uses onboard flash        | Preserves flash memory        |
-| Limited scalability       | Suitable for large GUI projects |
+| Limited capacity | Expandable storage |
+| Difficult to update | Easy asset replacement |
+| Small image library | Virtually unlimited resources |
+| Uses onboard flash | Preserves flash memory |
+| Limited scalability | Suitable for large GUI projects |
 
 Possible applications include:
 
@@ -339,7 +339,7 @@ This experiment successfully demonstrates:
 
 ---
 
-## `move.py` — Interactive Pico to SD File Copy Manager
+## `move.py` - Interactive Pico to SD File Copy Manager
 
 The `move.py` utility provides an interactive command-line interface for copying files from the Raspberry Pi Pico's internal filesystem to a mounted microSD card. Unlike a fixed copy script, the program dynamically discovers available files and destination folders, allowing multiple copy operations during a single execution.
 
@@ -368,7 +368,7 @@ The `move.py` utility provides an interactive command-line interface for copying
 
 ```text
 ========================================
-        PICO SD FILE COPY MANAGER
+ PICO SD FILE COPY MANAGER
 ========================================
 
 Files available in Pico root:
@@ -408,13 +408,13 @@ Select destination folder: 1
 Copying...
 ✅ Copy completed.
 
-Source      : /mount_sd.py
+Source : /mount_sd.py
 Destination : /sd/Package/mount_sd.py
 
 Copy another file? (Y/N): y
 
 ========================================
-        PICO SD FILE COPY MANAGER
+ PICO SD FILE COPY MANAGER
 ========================================
 
 Files available in Pico root:
@@ -454,7 +454,7 @@ Select destination folder: 1
 Copying...
 ✅ Copy completed.
 
-Source      : /sd_speed_test.py
+Source : /sd_speed_test.py
 Destination : /sd/Package/sd_speed_test.py
 
 Copy another file? (Y/N): n
@@ -500,4 +500,3 @@ Project License: The original code developed for this repository is licensed und
 ---
 
 ⭐ If you found this project helpful, consider starring the repository on GitHub. Your support helps the project reach more developers and encourages future development.
-
