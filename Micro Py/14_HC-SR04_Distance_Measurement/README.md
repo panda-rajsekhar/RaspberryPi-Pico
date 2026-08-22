@@ -17,15 +17,15 @@ The program continuously triggers the HC-SR04 sensor, measures how long it takes
 
 ### Connections 
 
-| Component    | Pico Pin |
+| Component | Pico Pin |
 | ------------ | -------- |
-| LCD SDA      | GP0      |
-| LCD SCL      | GP1      |
-| HC-SR04 TRIG | GP15     |
-| HC-SR04 ECHO | GP14     |
-| GND          | GND      |
-| LCD VCC      | 5V/VBUS* |
-| HC-SR04 VCC  | 3.3V VSYS |
+| LCD SDA | GP0 |
+| LCD SCL | GP1 |
+| HC-SR04 TRIG | GP15 |
+| HC-SR04 ECHO | GP14 |
+| GND | GND |
+| LCD VCC | 5V/VBUS* |
+| HC-SR04 VCC | 3.3V VSYS |
 
 ### Circuit : 
 
@@ -65,12 +65,12 @@ The program continuously triggers the HC-SR04 sensor, measures how long it takes
 ```
 PS D:\14_HC-SR04_Distance_Measurement> tree /f
 D:.
-│   main.py
-│   README.md
-│   
+│ main.py
+│ README.md
+│ 
 └───assets
-        00_Ckt.jpg
-        01_det.jpg        
+ 00_Ckt.jpg
+ 01_det.jpg 
 ```
 
 >Note : To conduct this experiment you are required to import the $i^2c$LCD libraries which are available in this `05_16x2_LCD_i2c` directory , link : [05_16x2_LCD_i2c](https://github.com/panda-rajsekhar/RaspberryPi-Pico/tree/main/Micro%20Py/05_16x2_LCD_i2c)
