@@ -39,7 +39,7 @@ The internal pull-up resistor is enabled in software, eliminating the need for a
 
 ---
 
-## Experiment 1 — Button Controlled Onboard LED
+## Experiment 1 - Button Controlled Onboard LED
 
 In this experiment, the onboard LED directly follows the button state.
 
@@ -107,7 +107,7 @@ This scanning technique is widely used in calculators, PIN pads, ATMs, electroni
 
 ---
 
-## Experiment 1 — Reading Key Presses
+## Experiment 1 - Reading Key Presses
 
 The Pico scans the keypad continuously and prints the detected key to the serial terminal.
 
@@ -131,7 +131,7 @@ Key Pressed: #
 
 ---
 
-## Experiment 2 — Number Controlled LED Blink
+## Experiment 2 - Number Controlled LED Blink
 
 In this experiment, numeric keys control the Raspberry Pi Pico onboard LED.
 
@@ -196,19 +196,19 @@ The techniques learned in this chapter are commonly used in:
 04_Button_Switches/
 │
 ├── Assets/
-│   ├── button.jpg
-│   ├── button.gif
-│   ├── button_module.jpg
-│   ├── keypad.jpg
-│   ├── keypad.gif
-│   └── keypad_setup.jpg
+│ ├── button.jpg
+│ ├── button.gif
+│ ├── button_module.jpg
+│ ├── keypad.jpg
+│ ├── keypad.gif
+│ └── keypad_setup.jpg
 │
 ├── Button/
-│   └── Button_Read.py
+│ └── Button_Read.py
 │
 ├── Keypad/
-│   ├── Keypad_Read.py
-│   └── Keypad_LED_Blink.py
+│ ├── Keypad_Read.py
+│ └── Keypad_LED_Blink.py
 │
 └── README.md
 ```
