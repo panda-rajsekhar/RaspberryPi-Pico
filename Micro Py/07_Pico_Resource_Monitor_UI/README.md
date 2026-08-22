@@ -22,13 +22,13 @@ This project demonstrates how a small 128×160 TFT display can present live syst
 ### Hardware Setup
 
 <p align="center">
-  <img src="assets/00_circuit.jpg" width="700">
+ <img src="assets/00_circuit.jpg" width="700">
 </p>
 
 ### Static User Interface
 
 <p align="center">
-  <img src="assets/01_Static_UI.jpg" width="350">
+ <img src="assets/01_Static_UI.jpg" width="350">
 </p>
 
 ---
@@ -83,8 +83,8 @@ This approach provides:
 ```
 07_Pico_Resource_Monitor_UI/
 ├── assets/
-├── main.py          # Application entry point
-├── monitor.py       # Complete dashboard UI
+├── main.py # Application entry point
+├── monitor.py # Complete dashboard UI
 └── README.md
 ```
 
@@ -92,14 +92,14 @@ The UI itself is separated from the application logic.
 
 ```
 main.py
-    │
-    ▼
+ │
+ ▼
 monitor.py
-    │
-    ├── draw_static()
-    ├── update_values()
-    ├── update_display()
-    └── refresh()
+ │
+ ├── draw_static()
+ ├── update_values()
+ ├── update_display()
+ └── refresh()
 ```
 
 This modular structure allows the monitor to be reused inside larger Pico applications.
@@ -175,10 +175,4 @@ Planned additions include:
 - Menu system
 - Configurable themes
 
----
-
-## Author
-
-**Rajsekhar Panda**
-
-Designed and developed on real Raspberry Pi Pico hardware using MicroPython.
+<!---Jai Jagannath --->
