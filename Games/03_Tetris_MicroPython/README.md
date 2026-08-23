@@ -1,4 +1,4 @@
-# Raspberry Pi Pico Tetris (Micro Python) — Code Documentation
+# Raspberry Pi Pico Tetris (Micro Python) - Code Documentation
 
 ## Abstract
 
@@ -76,7 +76,7 @@ Everything downstream (cell drawing, panel borders, text placement) references t
 | `SOFT_DROP` | 80 ms | Downward step interval when the joystick is pushed down |
 | `MOVE_REPEAT` | 150 ms | Minimum time between horizontal joystick moves while held |
 
-`GRAVITY` is reduced by 40 ms per level (floored at 120 ms) in the main loop — see §8.4.
+`GRAVITY` is reduced by 40 ms per level (floored at 120 ms) in the main loop - see §8.4.
 
 ---
 
@@ -88,10 +88,10 @@ A dictionary mapping each of the seven standard tetromino letters (`I O T S Z J 
 
 ```python
 "T": [
-    [(1,0),(0,1),(1,1),(2,1)],   # rotation 0
-    [(1,0),(1,1),(2,1),(1,2)],   # rotation 1
-    [(0,1),(1,1),(2,1),(1,2)],   # rotation 2
-    [(1,0),(0,1),(1,1),(1,2)]    # rotation 3
+ [(1,0),(0,1),(1,1),(2,1)], # rotation 0
+ [(1,0),(1,1),(2,1),(1,2)], # rotation 1
+ [(0,1),(1,1),(2,1),(1,2)], # rotation 2
+ [(1,0),(0,1),(1,1),(1,2)] # rotation 3
 ]
 ```
 
@@ -123,7 +123,7 @@ paused = False
 game_over = False
 ```
 
-`board` is a 2D list (`ROWS` × `COLS`). Each cell is either `None` (empty) or a color constant (occupied, colored by whichever piece locked there). This same structure is reused both for collision checks and for rendering — a cell's color *is* its occupancy state.
+`board` is a 2D list (`ROWS` × `COLS`). Each cell is either `None` (empty) or a color constant (occupied, colored by whichever piece locked there). This same structure is reused both for collision checks and for rendering - a cell's color *is* its occupancy state.
 
 ---
 
@@ -131,7 +131,7 @@ game_over = False
 
 ### 6.1 `joystick(adc)`
 
-Reads a raw 16-bit ADC value (`0`–`65535`), recenters it around the midpoint (`32768`), and scales it to roughly `-100`…`+100`:
+Reads a raw 16-bit ADC value (`0`-`65535`), recenters it around the midpoint (`32768`), and scales it to roughly `-100`...`+100`:
 
 ```python
 value = adc.read_u16()
@@ -143,7 +143,7 @@ The sign is inverted at the end to correct for the joystick's physical wiring or
 
 ### 6.2 `get_shape()`
 
-Returns `SHAPES[piece_type][piece_rotation]` — a convenience accessor used everywhere the current piece's cell offsets are needed.
+Returns `SHAPES[piece_type][piece_rotation]` - a convenience accessor used everywhere the current piece's cell offsets are needed.
 
 ### 6.3 `random_piece()`
 
@@ -160,7 +160,7 @@ Given a hypothetical position and rotation, checks whether that placement is leg
 
 Row `< 0` (above the visible board, during spawn) is allowed through, since a piece partially above the board isn't colliding with anything yet.
 
-This function is the single source of truth for legality — `move()`, `rotate()`, and `spawn_piece()` all call it rather than duplicating boundary logic.
+This function is the single source of truth for legality - `move()`, `rotate()`, and `spawn_piece()` all call it rather than duplicating boundary logic.
 
 ### 6.5 `draw_cell(col, row, color)`
 
@@ -171,11 +171,11 @@ Draws one board cell as a filled rectangle at `(BOARD_X + col*CELL, BOARD_Y + ro
 - `draw_piece()` draws all four cells of the current piece in its color.
 - `erase_piece()` redraws those same four cells, but using whatever the board says should be there (either the locked color, or `BLACK` if empty).
 
-This pair is the basis of the **dirty-rectangle** rendering approach: instead of repainting the whole board every frame, moving a piece is "erase old position → move → draw new position", touching only 4–8 cells per step rather than all 128.
+This pair is the basis of the **dirty-rectangle** rendering approach: instead of repainting the whole board every frame, moving a piece is "erase old position → move → draw new position", touching only 4-8 cells per step rather than all 128.
 
 ### 6.7 `draw_board()`
 
-Iterates every cell in `board` and draws it (occupied color or black). This is a full-board repaint — deliberately more expensive than `draw_piece()`/`erase_piece()`, so it's only called when the board's static contents actually changed (after a line clear, or on unpause — see §9.3) rather than every frame.
+Iterates every cell in `board` and draws it (occupied color or black). This is a full-board repaint - deliberately more expensive than `draw_piece()`/`erase_piece()`, so it's only called when the board's static contents actually changed (after a line clear, or on unpause - see §9.3) rather than every frame.
 
 ### 6.8 `draw_next()`
 
@@ -188,7 +188,7 @@ The **full** screen repaint: clears the entire screen, draws the title, board bo
 - Once at game start (`main()`).
 - After a line clear (`clear_lines()`), since score/level/lines text needs updating anyway.
 
-It is **not** called on every pause/unpause cycle (see §9.3) — that was identified as an inefficient use of the dirty-rectangle strategy and fixed.
+It is **not** called on every pause/unpause cycle (see §9.3) - that was identified as an inefficient use of the dirty-rectangle strategy and fixed.
 
 ---
 
@@ -198,7 +198,7 @@ It is **not** called on every pause/unpause cycle (see §9.3) — that was ident
 
 Promotes `next_piece` to `piece_type` (or picks a random one on the very first call), generates a fresh `next_piece`, and resets rotation/position to the spawn point `(x=2, y=0)`.
 
-If the spawn position immediately collides, `game_over` is set `True` and a "GAME OVER" message is drawn — this is the standard Tetris top-out condition.
+If the spawn position immediately collides, `game_over` is set `True` and a "GAME OVER" message is drawn - this is the standard Tetris top-out condition.
 
 Otherwise it draws the new piece and updates the next-piece preview.
 
@@ -208,7 +208,7 @@ Computes a candidate position, checks `collision()`, and if legal: erases the pi
 
 ### 7.3 `rotate()`
 
-Tries the next rotation state (`(piece_rotation + 1) % len(SHAPES[piece_type])`) at the current position. If that collides, it attempts a one-cell **wall kick** to the left before giving up. This is a simplified version of the standard SRS wall-kick system — it only tries one offset rather than the full kick table, which is adequate for an 8-wide board.
+Tries the next rotation state (`(piece_rotation + 1) % len(SHAPES[piece_type])`) at the current position. If that collides, it attempts a one-cell **wall kick** to the left before giving up. This is a simplified version of the standard SRS wall-kick system - it only tries one offset rather than the full kick table, which is adequate for an 8-wide board.
 
 ### 7.4 `lock_piece()`
 
@@ -226,10 +226,10 @@ Repeatedly calls `move(0, 1)` until it returns `False` (piece has landed), then 
 
 1. Builds `new_board` by keeping only rows that are **not** fully occupied (`all(cell is not None for cell in row)` identifies a full row).
 2. Counts how many rows were dropped (`cleared`).
-3. If nothing cleared, returns early — no redraw needed.
+3. If nothing cleared, returns early - no redraw needed.
 4. Prepends empty rows to `new_board` until it's back to `ROWS` rows, so cleared rows visually "fall" the stack down by re-inserting blank rows at the top.
-5. Updates `score` (`cleared * 100 * level` — clearing multiple lines scores more than clearing them one at a time), `lines`, and recomputes `level = 1 + lines // 10` (level increases every 10 lines).
-6. **Reassigns `board = new_board`.** This was a real bug in an earlier version of this file: the function computed the cleared board but never wrote it back to the global `board`, so lines visually appeared to clear on the redraw but the underlying occupancy grid never changed — subsequent collision checks still saw the "cleared" cells as full. The missing `global board` declaration and the `board = new_board` assignment fix this.
+5. Updates `score` (`cleared * 100 * level` - clearing multiple lines scores more than clearing them one at a time), `lines`, and recomputes `level = 1 + lines // 10` (level increases every 10 lines).
+6. **Reassigns `board = new_board`.** This was a real bug in an earlier version of this file: the function computed the cleared board but never wrote it back to the global `board`, so lines visually appeared to clear on the redraw but the underlying occupancy grid never changed - subsequent collision checks still saw the "cleared" cells as full. The missing `global board` declaration and the `board = new_board` assignment fix this.
 7. Calls `draw_board()` then `draw_ui()` to reflect both the new board state and the updated score/level/lines text.
 
 ---
@@ -257,13 +257,13 @@ For the three buttons, each loop iteration compares the current reading against 
 ```python
 rotate_button = btn_rotate.value()
 if rotate_button and not old_rotate:
-    rotate()
+ rotate()
 old_rotate = rotate_button
 ```
 
-The action only fires on the specific tick where the button transitions from *not pressed* to *pressed* — i.e. the rising edge. Without this, since the main loop runs roughly every 30 ms, a single physical button press (which typically lasts well over 100 ms) would trigger the action many times in a row. This was exactly the earlier bug: pause would toggle on/off repeatedly within one press, rotate would spin through several rotation states before the finger lifted, and hard-drop would drop, lock, spawn, and instantly drop the *next* piece too.
+The action only fires on the specific tick where the button transitions from *not pressed* to *pressed* - i.e. the rising edge. Without this, since the main loop runs roughly every 30 ms, a single physical button press (which typically lasts well over 100 ms) would trigger the action many times in a row. This was exactly the earlier bug: pause would toggle on/off repeatedly within one press, rotate would spin through several rotation states before the finger lifted, and hard-drop would drop, lock, spawn, and instantly drop the *next* piece too.
 
-Note: this is edge-detection, not electrical debounce. True debounce filters out rapid electrical bounce noise from a mechanical switch (usually via a hardware RC filter or a longer software delay after the transition). What this code does is simpler — it just ensures one logical action per physical press — which is sufficient here since there's no evidence of switch-bounce artifacts, only the "fires every loop tick while held" problem.
+Note: this is edge-detection, not electrical debounce. True debounce filters out rapid electrical bounce noise from a mechanical switch (usually via a hardware RC filter or a longer software delay after the transition). What this code does is simpler - it just ensures one logical action per physical press - which is sufficient here since there's no evidence of switch-bounce artifacts, only the "fires every loop tick while held" problem.
 
 ### 9.3 Joystick horizontal throttling
 
@@ -271,20 +271,20 @@ Left/right movement is intentionally **not** edge-triggered, because holding the
 
 ```python
 if abs(x) > 40:
-    if time.ticks_diff(now, last_move_x) >= MOVE_REPEAT:
-        move(1 if x > 0 else -1, 0)
-        last_move_x = now
+ if time.ticks_diff(now, last_move_x) >= MOVE_REPEAT:
+ move(1 if x > 0 else -1, 0)
+ last_move_x = now
 else:
-    last_move_x = now - MOVE_REPEAT
+ last_move_x = now - MOVE_REPEAT
 ```
 
 - `40` is the deadzone threshold (below this, the joystick is treated as centered/idle).
 - The first push moves immediately (the `else` branch resets `last_move_x` far enough in the past that the very next threshold-crossing tick passes the `ticks_diff` check).
-- While held past the threshold, it repeats every `MOVE_REPEAT` (150 ms) rather than every 30 ms loop tick — this was the fix for "joystick too fast," where every single loop iteration was previously counted as a move.
+- While held past the threshold, it repeats every `MOVE_REPEAT` (150 ms) rather than every 30 ms loop tick - this was the fix for "joystick too fast," where every single loop iteration was previously counted as a move.
 
 ### 9.4 Efficient pause/resume redraw
 
-On pausing, only a "PAUSED" text string is drawn over the existing screen — no clearing, no rebuild.
+On pausing, only a "PAUSED" text string is drawn over the existing screen - no clearing, no rebuild.
 
 On resuming, the fix uses:
 
@@ -293,7 +293,7 @@ draw_board()
 draw_piece()
 ```
 
-instead of the earlier `draw_ui()` + `draw_piece()`. `draw_ui()` blanks the entire screen and redraws the title, both panel borders, the next-piece box, and all three sidebar labels — none of which changed while paused. `draw_board()` alone repaints just the 128 board cells (still not a true minimal dirty-rectangle redraw, since the "PAUSED" text isn't the *only* thing that needs clearing, but it's a large reduction from a full-screen wipe) and is consistent with the erase/redraw philosophy used everywhere else in the piece-movement code.
+instead of the earlier `draw_ui()` + `draw_piece()`. `draw_ui()` blanks the entire screen and redraws the title, both panel borders, the next-piece box, and all three sidebar labels - none of which changed while paused. `draw_board()` alone repaints just the 128 board cells (still not a true minimal dirty-rectangle redraw, since the "PAUSED" text isn't the *only* thing that needs clearing, but it's a large reduction from a full-screen wipe) and is consistent with the erase/redraw philosophy used everywhere else in the piece-movement code.
 
 ---
 
@@ -302,17 +302,17 @@ instead of the earlier `draw_ui()` + `draw_piece()`. `draw_ui()` blanks the enti
 Structure per iteration, in order:
 
 1. **Pause button check** (edge-triggered). If paused and `game_over` was already `True`, pressing pause restarts the game by recursively calling `main()`. Otherwise it toggles `paused`.
-2. **Early exit if paused or over**: `time.sleep_ms(50); continue` — skips all game logic, just idles and re-polls.
+2. **Early exit if paused or over**: `time.sleep_ms(50); continue` - skips all game logic, just idles and re-polls.
 3. **Horizontal joystick** (throttled, §9.3).
 4. **Rotate button** (edge-triggered).
 5. **Hard drop button** (edge-triggered); also resets `last_gravity` so gravity doesn't immediately fire again right after a hard drop.
-6. **Vertical joystick** — sets `gravity_time` to `SOFT_DROP` if pushed down past the threshold, otherwise computes level-scaled gravity: `max(120, GRAVITY - (level-1)*40)`.
-7. **Gravity step** — if enough time (`gravity_time`) has elapsed since the last automatic drop, attempt `move(0, 1)`; if that fails (piece has landed), call `lock_piece()`.
-8. `time.sleep_ms(30)` — a fixed ~30 ms loop delay, which sets the effective input-polling rate for everything above.
+6. **Vertical joystick** - sets `gravity_time` to `SOFT_DROP` if pushed down past the threshold, otherwise computes level-scaled gravity: `max(120, GRAVITY - (level-1)*40)`.
+7. **Gravity step** - if enough time (`gravity_time`) has elapsed since the last automatic drop, attempt `move(0, 1)`; if that fails (piece has landed), call `lock_piece()`.
+8. `time.sleep_ms(30)` - a fixed ~30 ms loop delay, which sets the effective input-polling rate for everything above.
 
 ### 10.1 Restart flow
 
-Pressing pause while `game_over` is `True` calls `main()` again (a fresh game) and `return`s out of the current (now-orphaned) invocation. This is a recursive restart rather than a loop-based reset — functionally fine for this program's depth, though on very constrained MicroPython stacks repeated restarts across a long play session could theoretically accumulate stack frames, since each `main()` call never actually returns from the *previous* invocation's perspective until the whole program is powered off. In practice this generally is not an issue for a session of this length.
+Pressing pause while `game_over` is `True` calls `main()` again (a fresh game) and `return`s out of the current (now-orphaned) invocation. This is a recursive restart rather than a loop-based reset - functionally fine for this program's depth, though on very constrained MicroPython stacks repeated restarts across a long play session could theoretically accumulate stack frames, since each `main()` call never actually returns from the *previous* invocation's perspective until the whole program is powered off. In practice this generally is not an issue for a session of this length.
 
 ---
 
@@ -339,24 +339,24 @@ At import time, `main()` is called once at module scope, which runs `start_scree
 ## 13 Output 
 
 <table>
-  <tr>
-    <td align="center">
-      <img src="assets/02_home_screen.jpg" width="300" />
-      <br>Home Screen
-    </td>
-    <td align="center">
-      <img src="assets/02_high_score.jpg" width="300" />
-      <br>High Score & Game Over 
-    </td>
-  </tr>
+ <tr>
+ <td align="center">
+ <img src="assets/02_home_screen.jpg" width="300" />
+ <br>Home Screen
+ </td>
+ <td align="center">
+ <img src="assets/02_high_score.jpg" width="300" />
+ <br>High Score & Game Over 
+ </td>
+ </tr>
 </table>
 
-## Author’s Viewpoint
+## Author's Viewpoint
 
 This MicroPython Tetris project was developed as a practical way to explore embedded programming beyond simple sensor and display experiments. The goal was not only to recreate a familiar game, but also to understand how a microcontroller handles real-time input, graphics, memory, timing, and game logic within limited hardware resources.
 
 Developing Tetris on the Raspberry Pi Pico provided valuable hands-on experience with MicroPython and the ST7735 TFT display. Implementing falling blocks, collision detection, rotation, line clearing, scoring, and button-based controls required careful consideration of both software logic and hardware limitations.
 
-From the author’s perspective, the project demonstrates that even a small microcontroller can support an interactive graphical application when the software is designed efficiently. It also serves as a bridge between basic embedded programming experiments and more complex projects involving real-time systems, user interfaces, and hardware–software integration.
+From the author's perspective, the project demonstrates that even a small microcontroller can support an interactive graphical application when the software is designed efficiently. It also serves as a bridge between basic embedded programming experiments and more complex projects involving real-time systems, user interfaces, and hardware-software integration.
 
-Ultimately, this project was built not merely to play Tetris, but to learn how an embedded system can be pushed from controlling individual components to running a complete, interactive application. 
+Ultimately, this project was built not merely to play Tetris, but to learn how an embedded system can be pushed from controlling individual components to running a complete, interactive application.
