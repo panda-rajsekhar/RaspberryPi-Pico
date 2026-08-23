@@ -1,4 +1,4 @@
-# 🦖 Dino Run — Raspberry Pi Pico
+# 🦖 Dino Run - Raspberry Pi Pico
 
 A Chrome-Dino-style endless runner implemented for the **Raspberry Pi Pico (RP2040)** using an **ST7735 TFT display** and a **4×4 matrix keypad**.
 
@@ -6,7 +6,7 @@ The project is written in **MicroPython** and is designed around a lightweight, 
 
 ---
 
-## 📌 Overview
+## Overview
 
 **Dino Run** is an endless-runner game inspired by the classic Chrome Dino game.
 
@@ -28,16 +28,16 @@ The implementation was designed around the same driver architecture used by the 
 
 ---
 
-## 🎮 Hardware
+## Hardware
 
 ### Required Hardware
 
-| Component                  | Purpose                           |
+| Component | Purpose |
 | --------------------------- | --------------------------------- |
-| Raspberry Pi Pico / RP2040  | Game controller                   |
-| ST7735 TFT LCD              | Game display                      |
-| 4×4 Matrix Keypad           | Player controls                   |
-| USB connection              | Power and MicroPython programming |
+| Raspberry Pi Pico / RP2040 | Game controller |
+| ST7735 TFT LCD | Game display |
+| 4×4 Matrix Keypad | Player controls |
+| USB connection | Power and MicroPython programming |
 
 ### Display
 
@@ -57,13 +57,13 @@ The game divides the display into two primary areas:
 
 ```text
 ┌──────────────────────────────┐
-│ HI        SCORE              │
-│ SPD  ◆ ◆ ◆                  │
+│ HI SCORE │
+│ SPD ◆ ◆ ◆ │
 ├──────────────────────────────┤
-│                              │
-│        GAME AREA             │
-│                              │
-│   🦖             🌵          │
+│ │
+│ GAME AREA │
+│ │
+│ 🦖 🌵 │
 │______________________________│
 └──────────────────────────────┘
 ```
@@ -80,7 +80,7 @@ The Pico, ST7735 TFT, and 4×4 matrix keypad wired together as described above.
 
 ---
 
-# ⌨️ Controls
+#  Controls
 
 The game uses three keys from the 4×4 keypad.
 
@@ -93,28 +93,28 @@ S3 → DUCK
 The full 4×4 layout, as read from `keypad.py`'s `self.keys[row][col]` table, is:
 
 ```text
-        col0   col1   col2   col3
-row0:   S13    S14    S15    S16
-row1:   S9     S10    S11    S12
-row2:   S5     S6     S7     S8
-row3:   S1     S2     S3     S4
+ col0 col1 col2 col3
+row0: S13 S14 S15 S16
+row1: S9 S10 S11 S12
+row2: S5 S6 S7 S8
+row3: S1 S2 S3 S4
 ```
 
 Only the bottom-left three keys (`S1`, `S2`, `S3`) are used by the game logic. If your physical silkscreen doesn't match this table, the three `KEY_START` / `KEY_JUMP` / `KEY_DUCK` constants at the top of `Dino.py` can be edited without touching the rest of the game.
 
-### S1 — Start / Restart
+### S1 - Start / Restart
 
 Starts the game from the title screen.
 
 After a collision, pressing **S1** starts a new run.
 
-### S2 — Jump
+### S2 - Jump
 
 Performs a fixed-height jump.
 
 The jump is **edge-triggered**, meaning the game reacts only when S2 is newly pressed rather than repeatedly triggering jumps while the key remains held. This is implemented by comparing the current scanned key against the previous tick's key (`key != prev_key`).
 
-### S3 — Duck
+### S3 - Duck
 
 S3 is **level-triggered**.
 
@@ -126,23 +126,23 @@ During an airborne jump, pressing S3 causes the dinosaur to **fast-fall** toward
 
 ---
 
-## ⚠️ A Note on Button Debounce
+## ⚠ A Note on Button Debounce
 
 `scan_key()` reads the physical keypad's electrical state directly, once per loop iteration, with no software debouncing logic in front of it. This means **contact bounce** is a realistic possibility with this circuit.
 
-**What debounce actually is:** a mechanical switch (including the switches inside a matrix keypad) doesn't transition cleanly from "open" to "closed" the instant it's pressed. The metal contacts physically bounce against each other for a very short window — typically somewhere in the range of a few hundred microseconds to a few milliseconds — before settling into a stable connection. Read fast enough and often enough, a microcontroller can see that bounce as several rapid presses and releases instead of one clean press.
+**What debounce actually is:** a mechanical switch (including the switches inside a matrix keypad) doesn't transition cleanly from "open" to "closed" the instant it's pressed. The metal contacts physically bounce against each other for a very short window - typically somewhere in the range of a few hundred microseconds to a few milliseconds - before settling into a stable connection. Read fast enough and often enough, a microcontroller can see that bounce as several rapid presses and releases instead of one clean press.
 
 **Why it matters here specifically:**
 
 * `KEY_JUMP` is edge-triggered (`key != prev_key`). If S2's contacts bounce across two consecutive scans, the game could register a second jump edge immediately after the first, even though the player only pressed the key once.
-* `KEY_DUCK` is level-triggered, so bounce is less likely to cause a visible problem there — a few bounced reads still just mean "duck is/was held."
-* The main loop scans the keypad roughly every 5 ms (`sleep_ms(5)`) but only advances the game every `TICK_MS` (30 ms). This spacing happens to give mechanical contacts a little time to settle between reads, which reduces how often bounce is visible in practice, but it does not eliminate it — it's a side effect of the timing, not an intentional debounce mechanism.
+* `KEY_DUCK` is level-triggered, so bounce is less likely to cause a visible problem there - a few bounced reads still just mean "duck is/was held."
+* The main loop scans the keypad roughly every 5 ms (`sleep_ms(5)`) but only advances the game every `TICK_MS` (30 ms). This spacing happens to give mechanical contacts a little time to settle between reads, which reduces how often bounce is visible in practice, but it does not eliminate it - it's a side effect of the timing, not an intentional debounce mechanism.
 
-**If bounce becomes noticeable** (e.g. occasional "double jumps" from a single press), a small software debounce can be added without changing the rest of the game — for example, ignoring a new key transition for a few milliseconds after the previous one, or requiring a key to read consistently across two or three consecutive scans before it's accepted as a genuine press/release. Hardware options (a small RC filter, or a keypad/switch with built-in debounce) are also possible if a software fix isn't desired.
+**If bounce becomes noticeable** (e.g. occasional "double jumps" from a single press), a small software debounce can be added without changing the rest of the game - for example, ignoring a new key transition for a few milliseconds after the previous one, or requiring a key to read consistently across two or three consecutive scans before it's accepted as a genuine press/release. Hardware options (a small RC filter, or a keypad/switch with built-in debounce) are also possible if a software fix isn't desired.
 
 ---
 
-# 🗂️ Project Architecture
+# Project Architecture
 
 The game is intentionally separated from the underlying hardware drivers.
 
@@ -151,11 +151,11 @@ Dino Run
 │
 ├── Dino.py
 └───assets
-        00_Circuit_Setup.jpg
-        01_Controls.jpg
-        02_Home_Screen.jpg
-        03_Running.jpg
-        04_Game_Over.jpg
+ 00_Circuit_Setup.jpg
+ 01_Controls.jpg
+ 02_Home_Screen.jpg
+ 03_Running.jpg
+ 04_Game_Over.jpg
 ```
 
 ### `Dino.py`
@@ -229,7 +229,7 @@ These are used for the controls screen, title screen, game-over screen, score pa
 
 ---
 
-# ⚙️ Game Loop Architecture
+# Game Loop Architecture
 
 One of the most important design decisions in Dino Run is separating **input scanning** from the **game tick**.
 
@@ -237,31 +237,31 @@ The keypad is scanned continuously, once per loop iteration:
 
 ```text
 Keypad Scan
-     │
-     ▼
-  Input State
-     │
-     ├───────────────┐
-     │               │
-     ▼               ▼
-Jump Edge        Duck Level
-Detection        Detection
-     │               │
-     └───────┬───────┘
-             ▼
-        Game Tick
-             │
-             ▼
-       Physics Update
-             │
-             ▼
-      Obstacle Update
-             │
-             ▼
-        Collision
-             │
-             ▼
-         Rendering
+ │
+ ▼
+ Input State
+ │
+ ├───────────────┐
+ │ │
+ ▼ ▼
+Jump Edge Duck Level
+Detection Detection
+ │ │
+ └───────┬───────┘
+ ▼
+ Game Tick
+ │
+ ▼
+ Physics Update
+ │
+ ▼
+ Obstacle Update
+ │
+ ▼
+ Collision
+ │
+ ▼
+ Rendering
 ```
 
 The game uses:
@@ -276,7 +276,7 @@ This prevents blocking keypad operations from freezing the game, and decouples "
 
 ---
 
-# 🎯 Non-Blocking Keypad Input
+# Non-Blocking Keypad Input
 
 A conventional blocking keypad function such as:
 
@@ -297,14 +297,14 @@ Instead, Dino Run implements its own scanner:
 
 ```python
 def scan_key():
-    detected = None
-    for c in range(4):
-        kp.cols[c].value(1)
-        for r in range(4):
-            if kp.rows[r].value():
-                detected = kp.keys[r][c]
-        kp.cols[c].value(0)
-    return detected
+ detected = None
+ for c in range(4):
+ kp.cols[c].value(1)
+ for r in range(4):
+ if kp.rows[r].value():
+ detected = kp.keys[r][c]
+ kp.cols[c].value(0)
+ return detected
 ```
 
 The scanner drives each column pin high one at a time, reads all four row pins, and immediately returns. If no key is pressed:
@@ -315,11 +315,11 @@ None
 
 is returned. This allows the game to repeatedly poll the keypad without ever blocking the runner.
 
-A second helper, `wait_for_key(target=None)`, is used only on the non-gameplay screens (controls, title, game-over). It first waits for any already-held key to release, then blocks until a fresh key press (optionally matching a specific `target` key) is detected — acceptable here because these screens are not actively simulating a running game.
+A second helper, `wait_for_key(target=None)`, is used only on the non-gameplay screens (controls, title, game-over). It first waits for any already-held key to release, then blocks until a fresh key press (optionally matching a specific `target` key) is detected - acceptable here because these screens are not actively simulating a running game.
 
 ---
 
-# 🦖 Player Physics
+#  Player Physics
 
 The dinosaur uses a simple integer-based physics model suitable for the RP2040.
 
@@ -349,21 +349,21 @@ on_ground = True
 The dinosaur therefore follows a simple ballistic jump:
 
 ```text
-             🦖
-          ↗      ↘
-       ↗            ↘
-    ↗                  ↘
+ 🦖
+ ↗ ↘
+ ↗ ↘
+ ↗ ↘
 ────────────────────────────
-           GROUND
+ GROUND
 ```
 
-The physics intentionally use integer arithmetic, avoiding floating-point calculations inside the main game loop — important for a MicroPython interpreter running on a microcontroller with no hardware FPU acceleration comparable to a desktop CPU.
+The physics intentionally use integer arithmetic, avoiding floating-point calculations inside the main game loop - important for a MicroPython interpreter running on a microcontroller with no hardware FPU acceleration comparable to a desktop CPU.
 
-> **Author's note:** the current jump/gravity/fast-fall values (`GRAVITY = 1`, `JUMP_VELOCITY = -11`, `FAST_FALL_VELOCITY = 10`) don't feel especially smooth or "comfortable" to play as-is — the jump arc can feel abrupt and the fast-fall a bit sudden. This wasn't heavily tuned. All three values live as plain constants at the top of `Dino.py` specifically so they're easy to adjust; if the jump feels too floaty, too sharp, too short, or too long, changing `GRAVITY` and `JUMP_VELOCITY` (and `FAST_FALL_VELOCITY` for the duck-fall) is the place to start. See **🛠️ Troubleshooting** below for specific tuning suggestions.
+> **Author's note:** the current jump/gravity/fast-fall values (`GRAVITY = 1`, `JUMP_VELOCITY = -11`, `FAST_FALL_VELOCITY = 10`) don't feel especially smooth or "comfortable" to play as-is - the jump arc can feel abrupt and the fast-fall a bit sudden. This wasn't heavily tuned. All three values live as plain constants at the top of `Dino.py` specifically so they're easy to adjust; if the jump feels too floaty, too sharp, too short, or too long, changing `GRAVITY` and `JUMP_VELOCITY` (and `FAST_FALL_VELOCITY` for the duck-fall) is the place to start. See **🛠 Troubleshooting** below for specific tuning suggestions.
 
 ---
 
-# 🏃 Dino States
+#  Dino States
 
 The game maintains several important player-state variables (all module-level globals mutated via `global` inside functions):
 
@@ -381,7 +381,7 @@ These determine the dinosaur's current hitbox and sprite, computed by `dino_rect
 The normal dinosaur sprite/hitbox is:
 
 ```text
-20 × 22 pixels     (DINO_W × DINO_H)
+20 × 22 pixels (DINO_W × DINO_H)
 ```
 
 ### Ducking
@@ -389,16 +389,16 @@ The normal dinosaur sprite/hitbox is:
 The ducking state only applies while `on_ground` is `True`. It reduces the effective player height to:
 
 ```text
-20 × 10 pixels     (DINO_W × DINO_DUCK_H)
+20 × 10 pixels (DINO_W × DINO_DUCK_H)
 ```
 
 No separate duck bitmap was supplied for the sprite art, so the game reuses the bottom `DINO_DUCK_H` rows of the same standing dino bitmap (the legs/tail region) via `build_sprite_buffer(..., row_start=DINO_H - DINO_DUCK_H, row_count=DINO_DUCK_H)`, producing a cropped-but-consistent crouch pose instead of falling back to a plain rectangle.
 
-Mid-air, `ducking` is always forced back to `False` — the hitbox stays standing-sized while jumping, and a held duck key instead triggers the fast-fall behavior described above.
+Mid-air, `ducking` is always forced back to `False` - the hitbox stays standing-sized while jumping, and a held duck key instead triggers the fast-fall behavior described above.
 
 ---
 
-# 🌵 Obstacles
+#  Obstacles
 
 Dino Run currently supports two obstacle types, both defined as packed 1-bpp bitmaps (cactus) or solid-color rectangles (pterodactyl).
 
@@ -407,13 +407,13 @@ Dino Run currently supports two obstacle types, both defined as packed 1-bpp bit
 The cactus is a ground obstacle, rendered from `CACTUS_BITMAP`:
 
 ```text
-       ██
-       ██
-    ███████
-       ██
-       ██
-       ██
-       ██
+ ██
+ ██
+ ███████
+ ██
+ ██
+ ██
+ ██
 ```
 
 Its dimensions are:
@@ -427,7 +427,7 @@ The cactus uses a packed 1-bit bitmap (MSB-first, each row padded to a whole num
 
 ---
 
-# 🦅 Flying Obstacle
+#  Flying Obstacle
 
 The game also generates a flying obstacle representing a pterodactyl. Unlike the cactus, it currently has no bitmap and is drawn as a solid filled rectangle in `PTERO_COLOR` (magenta).
 
@@ -444,15 +444,15 @@ Its vertical position is fixed at "head height" of a *standing* dino:
 PTERO_Y = GROUND_Y - DINO_H
 ```
 
-— well above a ducking dino's much shorter hitbox, which is precisely what makes ducking (rather than jumping) the reliable response to it:
+- well above a ducking dino's much shorter hitbox, which is precisely what makes ducking (rather than jumping) the reliable response to it:
 
 ```text
 CACTUS
-   ↓
+ ↓
 JUMP
 
 PTERODACTYL
-   ↓
+ ↓
 DUCK
 ```
 
@@ -466,7 +466,7 @@ meaning a newly spawned obstacle has a configured 35% chance of being a pterodac
 
 ---
 
-# 🎲 Procedural Obstacle Generation
+#  Procedural Obstacle Generation
 
 Obstacles are generated dynamically rather than being stored as a predefined level.
 
@@ -483,7 +483,7 @@ Random values come from `urandom.getrandbits(16)` on-device (falling back to Pyt
 
 ---
 
-# 💥 Collision Detection
+#  Collision Detection
 
 Collision detection uses axis-aligned bounding boxes (AABB).
 
@@ -491,7 +491,7 @@ The collision function checks whether two rectangular hitboxes overlap:
 
 ```python
 def rects_overlap(ax, ay, aw, ah, bx, by, bw, bh):
-    return ax < bx + bw and ax + aw > bx and ay < by + bh and ay + ah > by
+ return ax < bx + bw and ax + aw > bx and ay < by + bh and ay + ah > by
 ```
 
 Conceptually:
@@ -499,14 +499,14 @@ Conceptually:
 ```text
 Player
 ┌────────┐
-│  🦖    │
+│ 🦖 │
 └────────┘
-     │
-     │ collision
-     ▼
-   ┌─────┐
-   │ 🌵  │
-   └─────┘
+ │
+ │ collision
+ ▼
+ ┌─────┐
+ │ 🌵 │
+ └─────┘
 ```
 
 Every tick, the current dino rectangle (from `dino_rect()`, which already accounts for ducking) is checked against every active obstacle rectangle. A collision immediately sets:
@@ -519,7 +519,7 @@ which halts scoring and triggers the game-over screen on the next iteration of t
 
 ---
 
-# 🖼️ Sprite Rendering
+#  Sprite Rendering
 
 The game does not repeatedly decode the original bitmap data during gameplay.
 
@@ -540,18 +540,18 @@ DINO_DUCK_BUF
 CACTUS_BUF
 ```
 
-This eliminates bitmap decoding from the main game tick — at runtime the game only ever blits pre-built byte buffers.
+This eliminates bitmap decoding from the main game tick - at runtime the game only ever blits pre-built byte buffers.
 
 ---
 
-# ⚡ Background Rendering Optimization
+#  Background Rendering Optimization
 
 A particularly important optimization is the use of **background rendering**.
 
 Instead of storing transparency information and performing a separate erase operation for every sprite pixel, each sprite buffer is built with the play area's background color already baked into every transparent (`0`) pixel:
 
 ```text
-Sprite pixel (1)      → sprite color
+Sprite pixel (1) → sprite color
 Transparent pixel (0) → BG_COLOR
 ```
 
@@ -563,31 +563,31 @@ set_window()
 write_buffer()
 ```
 
-operation both **draws the sprite** and **erases whatever was behind it**, in one bulk SPI burst — no separate erase pass is needed for the sprite's own footprint.
+operation both **draws the sprite** and **erases whatever was behind it**, in one bulk SPI burst - no separate erase pass is needed for the sprite's own footprint.
 
 This is especially useful on the ST7735 because the display communicates over SPI and transfer operations are relatively expensive; this mirrors the same trick the driver's `draw_text_fast()` uses for glyphs, applied here to game sprites.
 
 ---
 
-# ✂️ Sprite Clipping
+#  Sprite Clipping
 
-Obstacles can partially exist outside the display — they spawn just past the right edge and later scroll off the left edge.
+Obstacles can partially exist outside the display - they spawn just past the right edge and later scroll off the left edge.
 
 ```text
-                  ┌──────────── DISPLAY ────────────┐
-                  │                                  │
-                  │                         ████     │
-                  │                         ████     │
-                  └──────────────────────────────────┘
-                                             ↑
-                                      partially visible
+ ┌──────────── DISPLAY ────────────┐
+ │ │
+ │ ████ │
+ │ ████ │
+ └──────────────────────────────────┘
+ ↑
+ partially visible
 ```
 
 Because the driver's `set_window()` operation does not automatically clip coordinates the way `fill_rectangle()` does, the game implements its own clipping inside `blit()`:
 
 ```python
 def blit(x, y, w, h, buf):
-    ...
+ ...
 ```
 
 The function:
@@ -601,7 +601,7 @@ If the sprite is fully off-screen, `blit()` returns immediately without touching
 
 ---
 
-# 🧹 Rendering Strategy
+#  Rendering Strategy
 
 Each game tick (`step_game()`) follows a predictable rendering sequence:
 
@@ -622,13 +622,13 @@ Each game tick (`step_game()`) follows a predictable rendering sequence:
 14. Update the speed meter widget if the speed just changed
 ```
 
-This approach avoids clearing the entire display every frame — the game never calls a full-screen `fill_screen()` mid-run. Only regions affected by movement are erased and redrawn, which matters a great deal for a small SPI-connected TFT where every transfer has real, measurable latency.
+This approach avoids clearing the entire display every frame - the game never calls a full-screen `fill_screen()` mid-run. Only regions affected by movement are erased and redrawn, which matters a great deal for a small SPI-connected TFT where every transfer has real, measurable latency.
 
 ![Running](assets/03_Running.jpg)
 
 ---
 
-# 📈 Difficulty Scaling
+#  Difficulty Scaling
 
 The game gradually increases its scrolling speed.
 
@@ -655,20 +655,20 @@ score points, checked with `score % SPEED_UP_EVERY_SCORE == 0`.
 Therefore:
 
 ```text
-Score       Speed
+Score Speed
 ──────────────────
-0–149         2
-150–299       3
-300–449       4
-450–599       5
-600+          6
+0-149 2
+150-299 3
+300-449 4
+450-599 5
+600+ 6
 ```
 
 The speed meter widget (`draw_speed_meter()`, backed by `widgets_dev.draw_meter()`) is updated only when the speed actually changes, rather than being unnecessarily redrawn every game tick.
 
 ---
 
-# 🏆 Score System
+#  Score System
 
 The score represents how long the player survives.
 
@@ -690,18 +690,18 @@ When the player gets a new record, checked in `step_game()` right after a collis
 
 ```python
 if score > high_score:
-    high_score = score
+ high_score = score
 ```
 
 The high score is therefore preserved across in-session game restarts (calls to `reset_game()`), but is **not** persisted to flash, so it resets back to `0` after a hard Pico reboot.
 
 ---
 
-# 🖥️ User Interface
+#  User Interface
 
 Dino Run contains three primary interface screens, each built from `widgets_dev.py` components.
 
-## 1. Controls Screen — `show_controls_screen()`
+## 1. Controls Screen - `show_controls_screen()`
 
 Displayed once, when the program first starts.
 
@@ -714,25 +714,25 @@ START:S1
 JUMP:S2
 DUCK:S3
 
-        ANY KEY
+ ANY KEY
 ```
 
 This prevents the player from having to remember the keypad mapping before playing. It blocks on `wait_for_key()` with no specific target, so any key advances past it.
 
 ---
 
-## 2. Title Screen — `title_screen()`
+## 2. Title Screen - `title_screen()`
 
 The title screen displays:
 
 ```text
 DINO RUN
 
-       🦖
+ 🦖
 
-   ┌──────────┐
-   │ S1:START │
-   └──────────┘
+ ┌──────────┐
+ │ S1:START │
+ └──────────┘
 ```
 
 The game waits specifically for `KEY_START` (`S1`) before starting, via `wait_for_key(KEY_START)`.
@@ -741,19 +741,19 @@ The game waits specifically for `KEY_START` (`S1`) before starting, via `wait_fo
 
 ---
 
-## 3. Game Over Screen — `game_over_screen()`
+## 3. Game Over Screen - `game_over_screen()`
 
 After a collision, `show_message_box()` renders a centered box:
 
 ```text
 ┌──────────────────┐
-│    GAME OVER     │
-│                  │
-│    SCORE:XXX     │
-│    HI:XXX        │
+│ GAME OVER │
+│ │
+│ SCORE:XXX │
+│ HI:XXX │
 └──────────────────┘
 
-    S1:RESTART
+ S1:RESTART
 ```
 
 Pressing S1 calls `reset_game()`, which resets the game state and begins another run without leaving `main()`.
@@ -762,7 +762,7 @@ Pressing S1 calls `reset_game()`, which resets the game state and begins another
 
 ---
 
-# 🔄 Game State Reset
+#  Game State Reset
 
 The game is designed so that it does **not** require a Pico reboot after a game over.
 
@@ -770,7 +770,7 @@ The function:
 
 ```python
 def reset_game():
-    ...
+ ...
 ```
 
 resets:
@@ -787,19 +787,19 @@ score
 game_over flag
 ```
 
-It then rebuilds the display from scratch — `fill_screen(BLACK)`, `draw_play_border()`, `draw_ground()`, draws the standing dino, and redraws the score panels and speed meter — so every restart begins from a visually clean, consistent state.
+It then rebuilds the display from scratch - `fill_screen(BLACK)`, `draw_play_border()`, `draw_ground()`, draws the standing dino, and redraws the score panels and speed meter - so every restart begins from a visually clean, consistent state.
 
 This makes repeated gameplay possible without restarting MicroPython or losing the current session's `high_score`.
 
 ---
 
-# 🧠 Memory and Performance Considerations
+#  Memory and Performance Considerations
 
 The implementation is designed with the limitations of a microcontroller in mind.
 
 ### Avoids unnecessary full-screen redraws
 
-The game does not call `display.fill_screen(...)` every frame — only once per `reset_game()`. During gameplay, only moving objects and dynamic UI elements are updated.
+The game does not call `display.fill_screen(...)` every frame - only once per `reset_game()`. During gameplay, only moving objects and dynamic UI elements are updated.
 
 ### Precomputes sprite buffers
 
@@ -811,7 +811,7 @@ The display's native 16-bit pixel format is used directly, avoiding any intermed
 
 ### Uses integer physics
 
-No floating-point physics calculations are required — `dino_y`, `velocity`, `GRAVITY`, etc. are all plain integers.
+No floating-point physics calculations are required - `dino_y`, `velocity`, `GRAVITY`, etc. are all plain integers.
 
 ### Uses fixed game timing
 
@@ -893,28 +893,28 @@ The startup sequence is:
 
 ```text
 Power On
-   │
-   ▼
+ │
+ ▼
 Controls Screen
-   │
-   ▼
+ │
+ ▼
 Wait for Key
-   │
-   ▼
+ │
+ ▼
 Title Screen
-   │
-   ▼
+ │
+ ▼
 Wait for S1
-   │
-   ▼
+ │
+ ▼
 Game
-   │
-   ├── Collision ──► Game Over
-   │                     │
-   │                     ▼
-   │                  S1 Restart
-   │                     │
-   └─────────────────────┘
+ │
+ ├── Collision ──► Game Over
+ │ │
+ │ ▼
+ │ S1 Restart
+ │ │
+ └─────────────────────┘
 ```
 
 This complete startup and restart flow is implemented in `main()`.
@@ -929,8 +929,8 @@ The game is intentionally configurable through constants near the top of the sou
 
 ```python
 KEY_START = 'S1'
-KEY_JUMP  = 'S2'
-KEY_DUCK  = 'S3'
+KEY_JUMP = 'S2'
+KEY_DUCK = 'S3'
 ```
 
 If the physical keypad wiring uses a different mapping, these values can be changed without modifying the rest of the game.
@@ -988,7 +988,7 @@ PTERO_CHANCE = 35
 
 ---
 
-# 🛠️ Troubleshooting
+# 🛠 Troubleshooting
 
 ### Display does not initialize
 
@@ -1069,14 +1069,14 @@ The repository currently contains just the game script and its screenshot assets
 
 ```text
 D:.
-│   Dino.py
+│ Dino.py
 │
 └───assets
-        00_Circuit_Setup.jpg
-        01_Controls.jpg
-        02_Home_Screen.jpg
-        03_Running.jpg
-        04_Game_Over.jpg
+ 00_Circuit_Setup.jpg
+ 01_Controls.jpg
+ 02_Home_Screen.jpg
+ 03_Running.jpg
+ 04_Game_Over.jpg
 ```
 
 This is captured directly from a PowerShell `tree /f` listing:
@@ -1088,43 +1088,43 @@ PS D:\Games\02_Dino_Run_MicroPython> tree /f
 Folder PATH listing for volume New Volume
 Volume serial number is 000000CC 6846:8396
 D:.
-│   Dino.py
+│ Dino.py
 │
 └───assets
-        00_Circuit_Setup.jpg
-        01_Controls.jpg
-        02_Home_Screen.jpg
-        03_Running.jpg
-        04_Game_Over.jpg
+ 00_Circuit_Setup.jpg
+ 01_Controls.jpg
+ 02_Home_Screen.jpg
+ 03_Running.jpg
+ 04_Game_Over.jpg
 PS D:\Games\02_Dino_Run_MicroPython>
 ```
 
-`Dino.py` currently imports its hardware drivers (`st7735_dev.py`, `colors.py`, `keypad.py`, `widgets_dev.py`) from elsewhere in the wider Pico project — they are **not yet part of this repository**. For a self-contained, easy-to-clone project, consider growing the structure into something like this:
+`Dino.py` currently imports its hardware drivers (`st7735_dev.py`, `colors.py`, `keypad.py`, `widgets_dev.py`) from elsewhere in the wider Pico project - they are **not yet part of this repository**. For a self-contained, easy-to-clone project, consider growing the structure into something like this:
 
 ```text
 02_Dino_Run_MicroPython/
 │
-├── Dino.py                     # main game script (entry point)
+├── Dino.py # main game script (entry point)
 ├── README.md
 │
-├── drivers/                    # shared hardware abstraction layer
-│   ├── st7735_dev.py           # ST7735 TFT display driver
-│   ├── colors.py                # RGB565 color constants
-│   ├── keypad.py                 # 4x4 matrix keypad wiring + scanning
-│   └── widgets_dev.py           # draw_panel / draw_button / draw_meter
+├── drivers/ # shared hardware abstraction layer
+│ ├── st7735_dev.py # ST7735 TFT display driver
+│ ├── colors.py # RGB565 color constants
+│ ├── keypad.py # 4x4 matrix keypad wiring + scanning
+│ └── widgets_dev.py # draw_panel / draw_button / draw_meter
 │
-└── assets/                     # README screenshots (not deployed to the Pico)
-    ├── 00_Circuit_Setup.jpg
-    ├── 01_Controls.jpg
-    ├── 02_Home_Screen.jpg
-    ├── 03_Running.jpg
-    └── 04_Game_Over.jpg
+└── assets/ # README screenshots (not deployed to the Pico)
+ ├── 00_Circuit_Setup.jpg
+ ├── 01_Controls.jpg
+ ├── 02_Home_Screen.jpg
+ ├── 03_Running.jpg
+ └── 04_Game_Over.jpg
 ```
 
 Notes on this improvised layout:
 
 * **`drivers/` is separated from the game script** so the same hardware abstraction layer can be reused by other games in the parent project (e.g. `snake.py`), matching the "Project Architecture" section above.
-* **`assets/` stays purely documentation-facing** — screenshots referenced by this README, not files copied onto the Pico's filesystem.
+* **`assets/` stays purely documentation-facing** - screenshots referenced by this README, not files copied onto the Pico's filesystem.
 * When deploying to the physical board, only `Dino.py` and the contents of `drivers/` need to be copied over (see **🚀 Installation** above); `README.md` and `assets/` are for the repository only.
 * If this game is eventually split out of the larger Pico project, `drivers/` could instead become a git submodule or a small installable package, so driver fixes benefit every game that depends on it instead of being duplicated per game folder.
 
@@ -1156,28 +1156,28 @@ The result is a small but complete embedded game engine running on an RP2040.
 
 # 📊 Technical Summary
 
-| Feature       | Implementation                     |
+| Feature | Implementation |
 | ------------- | ----------------------------------- |
-| MCU           | Raspberry Pi Pico / RP2040          |
-| Language      | MicroPython                         |
-| Display       | ST7735 TFT                          |
-| Resolution    | 128 × 160                           |
-| Input         | 4×4 Matrix Keypad                   |
-| Game Type     | Endless Runner                      |
-| Physics       | Integer-based                       |
-| Rendering     | RGB565                              |
-| Sprite Format | Packed 1-bit bitmap                 |
-| Game Tick     | 30 ms                               |
-| Initial Speed | 2 px/tick                           |
-| Maximum Speed | 6 px/tick                           |
-| Player Jump   | Fixed-height                        |
-| Ducking       | Ground crouch + airborne fast-fall  |
-| Obstacles     | Cactus (bitmap) + Pterodactyl (rect) |
-| Collision     | AABB                                |
-| Score         | Distance/survival based             |
-| High Score    | Persistent during current boot      |
-| Restart       | Without Pico reboot                 |
-| Input Model   | Non-blocking polling                |
+| MCU | Raspberry Pi Pico / RP2040 |
+| Language | MicroPython |
+| Display | ST7735 TFT |
+| Resolution | 128 × 160 |
+| Input | 4×4 Matrix Keypad |
+| Game Type | Endless Runner |
+| Physics | Integer-based |
+| Rendering | RGB565 |
+| Sprite Format | Packed 1-bit bitmap |
+| Game Tick | 30 ms |
+| Initial Speed | 2 px/tick |
+| Maximum Speed | 6 px/tick |
+| Player Jump | Fixed-height |
+| Ducking | Ground crouch + airborne fast-fall |
+| Obstacles | Cactus (bitmap) + Pterodactyl (rect) |
+| Collision | AABB |
+| Score | Distance/survival based |
+| High Score | Persistent during current boot |
+| Restart | Without Pico reboot |
+| Input Model | Non-blocking polling |
 
 ---
 
@@ -1243,10 +1243,10 @@ The most important optimization is the separation between **fast input polling**
 
 ---
 
-# ✍️ Author's Note
+# ✍ Author's Note
 
 This project was built by **Rajsekhar Panda**, who is not a professional game developer, but an intermediate-level programmer learning both software and hardware side by side through projects like this one.
 
-Dino Run started as a way to get more comfortable with real-time systems, SPI displays, and physical input handling on a microcontroller — not as a polished commercial game. Because of that, some parts of the implementation (the jump/gravity feel mentioned above, the lack of software debounce, the rectangle-based pterodactyl instead of a real sprite) are honest reflections of where the project currently stands rather than deliberate final design choices. They're documented in this README so anyone building on this project — including a future version of the author — knows exactly what's been tuned carefully and what's still a first pass. And for real testers I've intentionally left the flying dinosaur as just a colored block , I could have easily added it in the first place but this repository is learning oriented so 👉👈.. i want you to learn that add that and improve your version of the code , don't come to me to add that, do it yourself ! And moreover I am also working on the button issue and have found a solution assuming it will work for future projects. 
+Dino Run started as a way to get more comfortable with real-time systems, SPI displays, and physical input handling on a microcontroller - not as a polished commercial game. Because of that, some parts of the implementation (the jump/gravity feel mentioned above, the lack of software debounce, the rectangle-based pterodactyl instead of a real sprite) are honest reflections of where the project currently stands rather than deliberate final design choices. They're documented in this README so anyone building on this project - including a future version of the author - knows exactly what's been tuned carefully and what's still a first pass. And for real testers I've intentionally left the flying dinosaur as just a colored block , I could have easily added it in the first place but this repository is learning oriented so 👉👈.. i want you to learn that add that and improve your version of the code , don't come to me to add that, do it yourself ! And moreover I am also working on the button issue and have found a solution assuming it will work for future projects. 
 
-Feedback, issues, and pull requests that improve the physics feel, add debounce handling, or extend the sprite work are welcome.  
+Feedback, issues, and pull requests that improve the physics feel, add debounce handling, or extend the sprite work are welcome.
