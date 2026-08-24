@@ -265,11 +265,17 @@ def set_angle(angle):
  servo.duty_u16(duty)
 ```
 
+$$
+\mathrm{pulse\_us} = 1000 + \frac{1000 \times \mathrm{angle}}{90}
+$$
+
+
+$$
+\mathrm{duty} = \frac{\mathrm{pulse\_us}}{20000} \times 65535
+$$
+
 Maps a 0-90° angle to a 1000-2000 µs pulse, then converts that to a 16-bit duty value:
 
-$$\text{pulse\_us} = 1000 + \frac{1000 \times \text{angle}}{90}$$
-
-$$\text{duty} = \frac{\text{pulse\_us}}{20000} \times 65535$$
 
 | Angle | Pulse width | Approx. duty_u16 |
 |---|---|---|
@@ -372,9 +378,13 @@ def set_angle(angle):
 
 This is the key upgrade from the sweep-test version: instead of hardcoding three pulse widths, it **linearly maps an angle (0-90°) to a pulse width (1000-2000 µs)**, then converts that pulse width to a 16-bit duty value.
 
-$$\text{pulse\_us} = \text{MIN\_PULSE} + (\text{MAX\_PULSE} - \text{MIN\_PULSE}) \times \frac{\text{angle}}{90}$$
+$$
+\mathrm{pulse\_us} = \mathrm{MIN\_PULSE} + (\mathrm{MAX\_PULSE} - \mathrm{MIN\_PULSE}) \times \frac{\mathrm{angle}}{90}
+$$
 
-$$\text{duty} = \frac{\text{pulse\_us}}{20000} \times 65535$$
+$$
+\mathrm{duty} = \frac{\mathrm{pulse\_us}}{20000} \times 65535
+$$
 
 | Angle | Pulse width | Approx. duty_u16 |
 |---|---|---|
