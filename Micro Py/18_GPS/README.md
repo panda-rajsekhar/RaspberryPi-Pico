@@ -10,6 +10,34 @@
 
 The NEO-6M is a radio navigation receiver which is able to listen to gps satellites which are orbiting the Earth without the need of a SIM Card or Wifi or any active internet connection to obtain the GPS fix. 
 
+## Table of Contents
+
+- [NEO-6M GPS](#neo-6m-gps)
+- [Interfacing NEO-6M GPS Module with PICO via UART](#interfacing-neo-6m-gps-module-with-pico-via-uart)
+- [Hardware Wiring Context](#hardware-wiring-context)
+- [UART Communication Parameters](#uart-communication-parameters)
+- [How It Actually Works?](#how-it-actually-works-)
+- [Background: The NMEA GGA Sentence](#background-the-nmea-gga-sentence)
+  - [Converting NMEA Coordinates to Decimal Degrees](#converting-nmea-coordinates-to-decimal-degrees)
+- [Raw UART Test](#raw-uart-test)
+- [Satellites in View vs. Satellites Used](#satellites-in-view-vs-satellites-used)
+- [Line-by-Line Explanation](#line-by-line-explanation)
+  - [Imports](#imports)
+  - [UART Initialisation](#uart-initialisation)
+  - [Startup Messages](#startup-messages)
+  - [Main Loop and Reading a Line](#main-loop-and-reading-a-line)
+  - [Decoding](#decoding)
+  - [Filtering for GGA Sentences](#filtering-for-gga-sentences)
+  - [Field Splitting and Validation](#field-splitting-and-validation)
+  - [Extracting Fix Status and Satellite Count](#extracting-fix-status-and-satellite-count)
+  - [Reporting a Fix](#reporting-a-fix)
+  - [Reporting No Fix](#reporting-no-fix)
+  - [Error Handling](#error-handling)
+  - [Loop Pacing](#loop-pacing)
+- [Output](#output)
+- [Limitations and Possible Improvements](#limitations-and-possible-improvements)
+
+
 
 ## Hardware Wiring Context
 
