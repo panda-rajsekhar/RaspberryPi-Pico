@@ -27,6 +27,8 @@ This repository focuses on the **original Raspberry Pi Pico (2021)**, which feat
 
 The objective of this repository is to document the process of learning embedded systems using the Raspberry Pi Pico through a series of practical experiments and projects. Each project is organized with source code, circuit diagrams, explanations, and demonstrations to provide a structured learning path from basic GPIO control to advanced peripheral interfacing.
 
+**The standard drivers for this repository are in the Projects Directory in folder named Driver** 
+
 ---
 
 # Getting Started
