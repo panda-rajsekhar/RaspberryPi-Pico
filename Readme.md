@@ -6,6 +6,8 @@ Unlike a single-board computer such as the Raspberry Pi 4, the Raspberry Pi Pico
 
 This repository focuses on the **original Raspberry Pi Pico (2021)**, which features the **RP2040** microcontroller and **does not include built-in Wi-Fi or Bluetooth connectivity**. All networking capabilities, if required, must be added using external modules.
 
+As the developer of this repository my recommendation to anyone learning through this repository is to read this `Readme.md` first then read the  `USER-GUIDE.md` to understand this repository properly.  
+
 ![Original Raspberry Pi Pico](Assets/IMG_20260726_131444.jpg)
 
 ---
