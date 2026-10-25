@@ -1,4 +1,5 @@
 # Introduction
+> 💡 Finding this repository useful? Consider giving it a ⭐ to help others discover it!
 
 The **Raspberry Pi Pico** is a low-cost microcontroller development board introduced by the Raspberry Pi Foundation in **January 2021**. It is built around the **RP2040** microcontroller, the first microcontroller chip designed in-house by Raspberry Pi. The Pico was created to provide an affordable yet powerful platform for learning embedded systems, electronics, and hardware programming.
 
@@ -254,4 +255,4 @@ View → Files
 
 ---
 
-Happy Hacking! 🚀
+73 and Keep Debugging! 
